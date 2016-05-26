@@ -1,6 +1,6 @@
 {
   "name": "Arcanine",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {},
   "devDependencies": {
@@ -51,8 +51,21 @@
     "test": "grunt test"
   },
   "cordovaPlugins": [
-		"org.apache.cordova.device",
-		"org.apache.cordova.console",
-		"com.ionic.keyboard"
+    "org.apache.cordova.device",
+    "org.apache.cordova.console",
+    "com.ionic.keyboard",
+    "org.apache.cordova.vibration",
+    "org.apache.cordova.inappbrowser",
+    "org.apache.cordova.camera",
+    "org.apache.cordova.file",
+    "de.appplant.cordova.plugin.email-composer",
+    "org.apache.cordova.dialogs",
+    "nl.x-services.plugins.toast",
+    "com.verso.cordova.clipboard",
+    "org.apache.cordova.geolocation",
+    "org.apache.cordova.statusbar",
+    "org.apache.cordova.device-motion",
+    "org.pushandplay.cordova.apprate",
+    "uk.co.whiteoctober.cordova.appversion"
   ]
 }
