@@ -1,6 +1,6 @@
 'use strict';
 
-function appConfig($stateProvider, $urlRouterProvider) {
+function appRoute($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 	$stateProvider
 		.state('app', {
 			url: '/app',
@@ -9,17 +9,45 @@ function appConfig($stateProvider, $urlRouterProvider) {
 			controller: 'AppCtrl',
 			controllerAs: 'main'
 		})
-		.state('app.browse', {
-			url: '/browse',
+		.state('app.dashboard', {
+			url: '/dashboard',
 			views: {
 				'menuContent': {
-					templateUrl: 'templates/browse.html' //,
-						//controller: 'HomeCtrl'
+					templateUrl: 'templates/dashboard.html',
+					controller: 'DashboardCtrl',
+					controllerAs: 'dashboard'
 				}
 			}
 		});
-	$urlRouterProvider.otherwise('/app');
+	$urlRouterProvider.otherwise('/app/dashboard');
+	$ionicConfigProvider.tabs.position('top');
+	$ionicConfigProvider.views.swipeBackEnabled(true);
+}
+
+function appRate($cordovaAppRateProvider, $document) {
+	var prefs = {
+		language: 'en',
+		appName: 'Alma',
+		iosURL: '992255249',
+		usesUntilPrompt: 5,
+		promptForNewVersion: true,
+		androidURL: 'market://details?id=com.cymbit.Alma'
+	};
+
+	$document.addEventListener('deviceready', function() {
+		$cordovaAppRateProvider.setPreferences(prefs);
+	}, false);
+}
+
+function appIdentify($ionicAppProvider) {
+	$ionicAppProvider.identify({
+		app_id: 'e1f80125',
+		api_key: '78e1608ca9a8dad91cc3b4f896981b65d82055083a70cee2'
+	});
 }
 
 
-angular.module('arcanine.config', []).config(appConfig);
+angular.module('arcanine.config', [])
+	.config(appRoute);
+	//.config(appRate)
+	//.config(appIdentify);

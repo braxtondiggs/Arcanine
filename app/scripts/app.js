@@ -3,6 +3,8 @@ angular.module('arcanine', [
   'ionic',
   'arcanine.controllers',
   'arcanine.config',
+  'arcanine.directives',
+  'arcanine.services',
   'ngCordova',
   'angularMoment',
   'ngLodash',
