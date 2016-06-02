@@ -35,15 +35,16 @@ module.exports = function (grunt) {
     ngconstant: {
       options: {
         space: '  ',
-        wrap: '"use strict";\n\n {%= __ngModule %}',
-        name: 'config',
-        dest: '<%= yeoman.app %>/<%= yeoman.scripts %>/configuration.js'
+        wrap: '\'use strict\';\n{%= __ngModule %}',
+        name: 'arcanine.config',
+        dest: '<%= yeoman.app %>/<%= yeoman.scripts %>/configurations/constant.config.js'
       },
       development: {
         constants: {
           ENV: {
             name: 'development',
-            apiEndpoint: 'http://dev.yoursite.com:10000/'
+            apiEndpoint: 'http://localhost:9000/api/',
+            FIREBASE_URL: 'https://arbok.firebaseio.com/'
           }
         }
       },
@@ -51,7 +52,8 @@ module.exports = function (grunt) {
         constants: {
           ENV: {
             name: 'production',
-            apiEndpoint: 'http://api.yoursite.com/'
+            apiEndpoint: 'http://arbok.herokuapp.com/api/',
+            FIREBASE_URL: 'https://arbok.firebaseio.com/'
           }
         }
       }
@@ -223,9 +225,13 @@ module.exports = function (grunt) {
 
     // The following *-min tasks produce minified files in the dist folder
     cssmin: {
-      options: {
-        //root: '<%= yeoman.app %>',
-        noRebase: true
+      dist: {
+        files: [{
+          expand: true,
+          cwd: '.temp/<%= yeoman.styles %>',
+          src: ['main.css'],
+          dest: '<%= yeoman.dist %>/<%= yeoman.styles %>',
+        }]
       }
     },
     htmlmin: {

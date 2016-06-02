@@ -1,7 +1,7 @@
 'use strict';
 
-function AuthService($firebaseAuth, FIREBASE_URL) {
-	var usersRef = new Firebase(FIREBASE_URL + '/url');
+function AuthService($firebaseAuth, ENV) {
+	var usersRef = new Firebase(ENV.FIREBASE_URL + '/url');
 	return $firebaseAuth(usersRef);
 }
 

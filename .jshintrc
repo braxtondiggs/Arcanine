@@ -54,6 +54,7 @@
     "angular": false,
     "cordova": false,
     "StatusBar": false,
-    "Firebase":false
+    "Firebase":false,
+    "moment": false
   }
 }

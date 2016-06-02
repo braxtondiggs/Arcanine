@@ -1,9 +1,9 @@
 'use strict';
 
-function UserService($firebaseObject, FIREBASE_URL) {
+function UserService($firebaseObject, ENV) {
 	return {
 		ref: function(id) {
-			return new Firebase(FIREBASE_URL + 'Users/' + id);
+			return new Firebase(ENV.FIREBASE_URL + 'Users/' + id);
 		},
 		get: function(id) {
 			return $firebaseObject(this.ref(id));

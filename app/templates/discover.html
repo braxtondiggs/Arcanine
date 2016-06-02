@@ -1,0 +1,64 @@
+<ion-view view-title="Discover" ng-style="{'background-image':'url(images/BG.png)'}" class="discover" ng-init="discover.get('fresh')">
+    <ion-content scroll="false"><!-- ng-class="{'has-footer': queue.length}">-->
+        <ion-tabs class="tabs-icon-only tabs-striped text-only tabs-color-light">
+            <ion-tab title="New" on-select="discover.get('fresh')">
+                <ion-nav-view>
+                    <ion-content>
+                        <div class="list more dark-list animated fadeIn ordered" ng-show="discover.fresh.loaded">
+                            <a class="item item-thumbnail-left animated fadeIn" collection-repeat="fresh in discover.fresh.tracks" item-height="91px" item-width="100%" ng-click="discover.addToQueue(fresh)">
+                                <img ng-src="{{fresh.image.replace('tv.jpg', 'ov.jpg')}}" err-src="images/logo_missing.png">
+                                <i class="icon ion-play icon-accessory"></i>
+                                <h2>{{fresh.name}}</h2>
+                                <p>{{fresh.title}}</p>
+                                <img class="BGImage" ng-src="{{fresh.image.replace('tv.jpg', 'ov.jpg')}}" ng-if="fresh.image" />
+                                <span class="counter">{{$index+1}}.</span>
+                            </a>
+                        </div>
+                        <p class="empty-list" ng-show="!discover.fresh.tracks.length && !discover.fresh.loaded">It looks like we don't have any music for this section. Check back later!</p>
+                    </ion-content>
+                </ion-nav-view>
+            </ion-tab>
+            <ion-tab title="Top" on-select="discover.get('top')">
+                <ion-nav-view>
+                    <ion-content>
+                        <div class="list more dark-list animated fadeIn ordered" ng-show="discover.top.loaded">
+                            <a class="item item-thumbnail-left animated fadeIn" collection-repeat="top in discover.top.tracks" item-height="91px" item-width="100%" ng-click="discover.addToQueue(top)">
+                                <img ng-src="{{top.image.replace('tv.jpg', 'ov.jpg')}}" err-src="images/logo_missing.png">
+                                <i class="icon ion-play icon-accessory"></i>
+                                <h2>{{top.name}}</h2>
+                                <p>{{top.title}}</p>
+                                <img class="BGImage" ng-src="{{top.image.replace('tv.jpg', 'ov.jpg')}}" ng-if="top.image" />
+                                <span class="counter">{{$index+1}}.</span>
+                            </a>
+                        </div>
+                        <p class="empty-list" ng-show="!discover.top.tracks.length && !discover.top.loaded">It looks like we don't have any music for this section. Check back later!</p>
+                    </ion-content>
+                </ion-nav-view>
+            </ion-tab>
+            <ion-tab title="Playlists" on-select="discover.playlistSelected()" ng-if="false">
+                <ion-nav-view>
+                    <ion-content>
+                        Playlists
+                    </ion-content>
+                </ion-nav-view>
+            </ion-tab>
+            <ion-tab title="Genre" on-select="discover.genreSelected()" ng-if="false">
+                <ion-nav-view>
+                    <ion-content>
+                        <div class="list genre_list">
+                            <a href="app/genre/{{genre.name}}" class="item item-icon-left animated fadeIn delay-{{$index}}" collection-repeat="genre in discover.genres" item-height="91px" item-width="100%">
+                                <div class="list_content">
+                                    <i class="icon ion-social-youtube-outline"></i> #{{genre.get('name')}}
+                                    <span>
+                                        <strong>96</strong> Songs
+                                    </span>
+                                </div>
+                                <img class="BGImage" ng-src="{{genre.get('image')._url}}" style="margin-top:{{genre.get('position') + 'px'}}" />
+                            </a>
+                        </div>
+                    </ion-content>
+                </ion-nav-view>
+            </ion-tab>
+        </ion-tabs>
+    </ion-content>
+</ion-view>

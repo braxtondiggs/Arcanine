@@ -18,6 +18,16 @@ function appRoute($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 					controllerAs: 'dashboard'
 				}
 			}
+		})
+		.state('app.discover', {
+			url: '/discover',
+			views: {
+				'menuContent': {
+					templateUrl: 'templates/discover.html',
+					controller: 'DiscoverCtrl',
+					controllerAs: 'discover'
+				}
+			}
 		});
 	$urlRouterProvider.otherwise('/app/dashboard');
 	$ionicConfigProvider.tabs.position('top');
@@ -47,7 +57,7 @@ function appIdentify($ionicAppProvider) {
 }
 
 
-angular.module('arcanine.config', [])
+angular.module('arcanine.config')
 	.config(appRoute);
 	//.config(appRate)
 	//.config(appIdentify);
