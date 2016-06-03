@@ -21,9 +21,16 @@ function UtilsService() {
 		}
 	}
 
+	function unitConvert(unit, m) {
+		var KM_TO_MILES = 0.621371;
+		var MILES_TO_KM = 1.60934;
+		return Math.round(((unit === 'mi') ? m * KM_TO_MILES : m * MILES_TO_KM) * 100) / 100;
+	}
+
 	var service = {
 		checkImage: checkImage,
-		convertSlug: convertSlug
+		convertSlug: convertSlug,
+		unitConvert: unitConvert
 	};
 
 	return service;

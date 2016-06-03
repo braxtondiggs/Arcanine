@@ -56,6 +56,7 @@
     "StatusBar": false,
     "Firebase":false,
     "moment": false,
-    "ionic": false
+    "ionic": false,
+    "GeoFire": false
   }
 }

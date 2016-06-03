@@ -2,14 +2,6 @@
 
 function LoginCtrl($rootScope, Auth, User, Loading) {
 	var vm = this;
-	vm.auth = Auth;
-	vm.auth.$onAuth(function(authData) {
-		if (authData) {
-			$rootScope.user = authData[authData.provider];
-			console.log($rootScope.user);
-		}
-	});
-
 	vm.signup = {
 		form: {}
 	};

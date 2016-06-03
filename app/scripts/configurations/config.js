@@ -37,6 +37,15 @@ function appRoute($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 					controllerAs: 'search'
 				}
 			}
+		}).state('app.venue', {
+			url: '/venue',
+			views: {
+				'menuContent': {
+					templateUrl: 'templates/venue.html',
+					controller: 'VenueCtrl',
+					controllerAs: 'venue'
+				}
+			}
 		});
 	$urlRouterProvider.otherwise('/app/dashboard');
 	$ionicConfigProvider.tabs.position('top');
