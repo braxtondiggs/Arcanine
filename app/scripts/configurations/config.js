@@ -28,6 +28,15 @@ function appRoute($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 					controllerAs: 'discover'
 				}
 			}
+		}).state('app.search', {
+			url: '/search',
+			views: {
+				'menuContent': {
+					templateUrl: 'templates/search.html',
+					controller: 'SearchCtrl',
+					controllerAs: 'search'
+				}
+			}
 		});
 	$urlRouterProvider.otherwise('/app/dashboard');
 	$ionicConfigProvider.tabs.position('top');

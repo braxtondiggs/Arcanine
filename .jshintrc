@@ -55,6 +55,7 @@
     "cordova": false,
     "StatusBar": false,
     "Firebase":false,
-    "moment": false
+    "moment": false,
+    "ionic": false
   }
 }

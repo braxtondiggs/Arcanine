@@ -11,7 +11,7 @@ function DiscoverCtrl($http, $firebaseObject, ENV, Loading, lodash) {
 			var obj = $firebaseObject(new Firebase(ENV.FIREBASE_URL + 'Discover/' + sort));
 
 			obj.$loaded(function() {
-				if (obj && obj.tracks.length === 0 && moment(new Date(obj.date)).isBefore(new Date(), 'day')) {
+				if (!obj || !obj.tracks || obj.tracks.length === 0 || moment(new Date(obj.date)).isBefore(new Date(), 'day')) {
 					$http({
 						method: 'GET',
 						url: ENV.apiEndpoint + 'tracks/discover/' + sort
