@@ -12,32 +12,32 @@
                 <div class="box padding">
                     <h1>Alma</h1>
                     <p>Signup or use Facebook for a quicker access!</p>
-                    <form name="signup.form" ng-submit="user.signup.submit()" novalidate>
+                    <form name="user.signup.form" ng-submit="user.signup.submit()" novalidate>
                         <div class="status_dropdown error animated" ng-class="user.signup.error ? 'bounceInDown' : 'bounceOutUp'" ng-show="user.signup.error">
                             <h2 class="center">Validation Error</h2>
-                            <p ng-show="user.signup.form.name.$invalid" class="help-block">- Enter a valid name.</p>
+                            <p ng-show="user.signup.form.displayName.$invalid" class="help-block">- Enter a valid name.</p>
                             <p ng-show="user.signup.form.email.$invalid" class="help-block">- Enter a valid email.</p>
                             <p ng-show="user.signup.form.password.$invalid" class="help-block">- Enter a valid password.</p>
-                            <p ng-show="user.signup.error">- {{user.signup.error}}</p>
+                            <p ng-show="user.signup.error">- {{user.signup.error.code}}</p>
                             <i class="ion ion-close" ng-click="user.signup.error = null;"></i>
                         </div>
                         <div class="input">
-                            <label class="input__label" for="name">
+                            <label class="input__label" for="sname">
                                 <i class="icon ion-person"></i>
                             </label>
-                            <input class="input__field" type="text" placeholder="Name" name="name" id="signup-name" ng-model="name" ng-minlength="3" ng-required="true" ng-change="user.formChange()">
+                            <input class="input__field" type="text" placeholder="Name" name="sname" id="signup-displayName" ng-model="sname" ng-minlength="3" ng-required="true" ng-change="user.formChange()">
                         </div>
                         <div class="input">
-                            <label class="input__label" for="email">
+                            <label class="input__label" for="semail">
                                 <i class="icon ion-email"></i>
                             </label>
-                            <input class="input__field" type="email" placeholder="Email" name="email" id="signup-email" ng-model="email" ng-required="true" ng-pattern="/^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/" ng-change="user.formChange();">
+                            <input class="input__field" type="email" placeholder="Email" name="semail" id="signup-email" ng-model="semail" ng-required="true" ng-pattern="/^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/" ng-change="user.formChange();">
                         </div>
                         <div class="input">
-                            <label class="input__label" for="password">
+                            <label class="input__label" for="spassword">
                                 <i class="icon ion-locked"></i>
                             </label>
-                            <input class="input__field" type="password" placeholder="Password" name="password " id="signup-password" ng-model="password" ng-minlength="6" ng-required="true" ng-change="user.formChange();">
+                            <input class="input__field" type="password" placeholder="Password" name="spassword" id="signup-password" ng-model="spassword" ng-minlength="6" ng-required="true" ng-change="user.formChange();">
                         </div>
                         <button class="button button-outline dark-button" type="submit">Sign Up</button>
                     </form>
@@ -70,7 +70,7 @@
                             <h2 class="center">Validation Error</h2>
                             <p ng-show="user.login.form.email.$invalid" class="help-block">- Enter a valid email.</p>
                             <p ng-show="user.login.form.password.$invalid" class="help-block">- Enter a valid password.</p>
-                            <p ng-show="user.login.error">- {{login.error}}</p>
+                            <p ng-show="user.login.error">- {{login.error.code}}</p>
                             <i class="ion ion-close" ng-click="user.login.error = null"></i>
                         </div>
                         <!--<div class="status_dropdown success animated" ng-class="login.showPositive ? 'bounceInDown' : 'bounceOutUp'" ng-show="login.showPositive">
@@ -79,16 +79,16 @@
                             <i class="ion ion-close" ng-click="login.showPositive = false;"></i>
                         </div>-->
                         <div class="input">
-                            <label class="input__label" for="email">
+                            <label class="input__label" for="lemail">
                                 <i class="icon ion-email"></i>
                             </label>
-                            <input class="input__field" type="email" placeholder="Email" name="email" id="login-email" ng-model="email" ng-required="true" ng-pattern="/^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/" ng-change="user.formChange();">
+                            <input class="input__field" type="email" placeholder="Email" name="lemail" id="login-email" ng-model="lemail" ng-required="true" ng-pattern="/^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/" ng-change="user.formChange();">
                         </div>
                         <div class="input">
-                            <label class="input__label" for="password">
+                            <label class="input__label" for="lpassword">
                                 <i class="icon ion-locked"></i>
                             </label>
-                            <input class="input__field" type="password" placeholder="Password" name="password" id="login-password" ng-model="password" ng-minlength="6" ng-required="true" ng-change="user.formChange();">
+                            <input class="input__field" type="password" placeholder="Password" name="lpassword" id="login-password" ng-model="lpassword" ng-minlength="6" ng-required="true" ng-change="user.formChange();">
                             <i class="icon ion-help-circled password-reset" ng-click="user.forgotPassword()"></i>
                         </div>
                         <button class="button button-outline dark-button" type="submit">Log In</button>

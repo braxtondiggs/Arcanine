@@ -1,5 +1,5 @@
 <ion-view view-title="Discover" ng-style="{'background-image':'url(images/BG.png)'}" class="discover" ng-init="discover.get('fresh')">
-    <ion-content scroll="false"><!-- ng-class="{'has-footer': queue.length}">-->
+    <ion-content scroll="false" ng-class="{'has-footer': queueList.length}">
         <ion-tabs class="tabs-icon-only tabs-striped text-only tabs-color-light">
             <ion-tab title="New" on-select="discover.get('fresh')">
                 <ion-nav-view>

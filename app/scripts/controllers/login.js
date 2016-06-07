@@ -1,21 +1,25 @@
 'use strict';
 
-function LoginCtrl($rootScope, Auth, User, Loading) {
+function LoginCtrl($rootScope, $cordovaDialogs, Auth, User, Loading) {
 	var vm = this;
+	vm.auth = Auth;
+
 	vm.signup = {
 		form: {}
 	};
-	vm.login = vm.signup;
+	vm.login = {
+		form: {}
+	};
 	vm.login.submit = function() {
 		if (vm.login.form.$valid) {
 			Loading.show();
 			Auth.$authWithPassword({
-				email: vm.login.form.email.$viewValue,
-				password: vm.login.form.password.$viewValue
+				email: vm.login.form.lemail.$viewValue,
+				password: vm.login.form.lpassword.$viewValue
 			}).then(function(userData) {
 				User.update(userData.password).then(function() {
 					vm.login = {};
-					vm.signup = vm.login;
+					vm.signup = {};
 					$rootScope.closeLogin();
 					Loading.hide();
 				}).catch(function(err) {
@@ -31,20 +35,20 @@ function LoginCtrl($rootScope, Auth, User, Loading) {
 	vm.signup.submit = function() {
 		if (vm.signup.form.$valid) {
 			Auth.$createUser({
-				email: vm.signup.form.email.$viewValue,
-				password: vm.signup.form.password.$viewValue
+				email: vm.signup.form.semail.$viewValue,
+				password: vm.signup.form.spassword.$viewValue
 			}).then(function() {
 				Auth.$authWithPassword({
-					email: vm.signup.form.email.$viewValue,
-					password: vm.signup.form.password.$viewValue
+					email: vm.signup.form.semail.$viewValue,
+					password: vm.signup.form.spassword.$viewValue
 				}).then(function(userData) {
 					userData.password.id = userData.uid;
 					userData.password.accessToken = userData.token;
-					userData.password.displayName = vm.signup.form.name.$viewValue;
+					userData.password.displayName = vm.signup.form.sname.$viewValue;
 					userData.password.provider = 'Password';
 					User.update(userData.password).then(function() {
 						vm.login = {};
-						vm.signup = vm.login;
+						vm.signup = {};
 						$rootScope.closeLogin();
 						Loading.hide();
 					}).catch(function(err) {
@@ -63,31 +67,54 @@ function LoginCtrl($rootScope, Auth, User, Loading) {
 	};
 	vm.facebook = function() {
 		function createFacebook(authData) {
-            authData.facebook.provider = 'facebook';
-            User.update(authData.facebook).then(function() {
-                $rootScope.closeLogin();
+			authData.facebook.provider = 'facebook';
+			User.update(authData.facebook).then(function() {
+				$rootScope.closeLogin();
 				Loading.hide();
-            });
-        }
-        Auth.$authWithOAuthPopup('facebook', { scope: 'public_profile, email, user_friends, user_birthday' }).then(function(userData) {
-            createFacebook(userData);
-        }).catch(function(error) {
-            if (error.code === 'TRANSPORT_UNAVAILABLE') {
-                Auth.$authWithOAuthPopup('facebook', { scope: 'public_profile, email, user_friends, user_birthday' }).then(function(userData) {
-                    createFacebook(userData);
-                });
-            }
-        });
+			});
+		}
+		Auth.$authWithOAuthPopup('facebook', { scope: 'public_profile, email, user_friends, user_birthday' }).then(function(userData) {
+			createFacebook(userData);
+		}).catch(function(error) {
+			if (error.code === 'TRANSPORT_UNAVAILABLE') {
+				Auth.$authWithOAuthPopup('facebook', { scope: 'public_profile, email, user_friends, user_birthday' }).then(function(userData) {
+					createFacebook(userData);
+				});
+			}
+		});
 	};
 	vm.twitter = function() {
-
+		function createTwitter(authData) {
+			authData.twitter.provider = 'twitter';
+			User.update(authData.twitter).then(function() {
+				$rootScope.closeLogin();
+				Loading.hide();
+			});
+		}
+		Auth.$authWithOAuthPopup('twitter').then(function(userData) {
+			createTwitter(userData);
+		}).catch(function(error) {
+			if (error.code === 'TRANSPORT_UNAVAILABLE') {
+				Auth.$authWithOAuthPopup('twitter').then(function(userData) {
+					createTwitter(userData);
+				});
+			}
+		});
 	};
-	vm.formChange = function () {
+	vm.forgotPassword = function() {
+		if (vm.login.form.lemail.$valid) {
+			Auth.$resetPassword({
+				email: vm.login.form.lemail.$viewValue
+			}).then(function() {
+				$cordovaDialogs.alert('Password reset email sent successfully!', 'Alma', 'Ok');
+			}).catch(function(error) {
+				$cordovaDialogs.alert(error, 'Alma', 'Ok');
+			});
+		}
+	};
+	vm.formChange = function() {
 		vm.login.error = null;
 		vm.signup.error = null;
-	};
-	vm.forgetPassword = function() {
-
 	};
 }
 

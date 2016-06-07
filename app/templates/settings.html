@@ -1,0 +1,86 @@
+<ion-view view-title="Settings" ng-style="{'background-image':'url(images/BG.png)'}" class="settings">
+    <ion-content ng-class="{'has-footer': queueList.length}">
+        <div class="list">
+            <form name="settings.form" ng-submit="settings.submit()" novalidate>
+                <div class="status_dropdown error" ngfx-bounce-in-up="settings.form.$valid && settings.form.$dirty" ngfx-bounce-out-down="!settings.form.$valid" ngfx-default="hide">
+                    <h2 class="center">Validation Error</h2>
+                    <p ng-show="settings.form.name.$invalid" class="help-block">- Enter a valid name.</p>
+                    <p ng-show="settings.form.email.$invalid" class="help-block">- Enter a valid email.</p>
+                    <p ng-show="settings.form.password.$invalid" class="help-block">- Enter a valid password.</p>
+                    <i class="ion ion-close" ng-click="settings.form.$valid = null;"></i>
+                </div>
+                <div class="status_dropdown success" ngfx-bounce-in-up="settings.success" ngfx-bounce-out-down="!settings.success" ngfx-default="hide" ng-init="settings.success = false;">
+                    <h2 class="center">Success</h2>
+                    <p ng-show="settings.success">- {{settings.successMsg}}</p>
+                    <i class="ion ion-close" ng-click="settings.success = false;"></i>
+                </div>
+                <div id="account-settings" ng-if="main.user.provider === 'Password'">
+                    <div class="item item-divider">
+                        <span class="animated bounceInLeft">ACCOUNT SETTINGS</span>
+                    </div>
+                    <div class="item item-input item-floating-label">
+                        <span class="input-label">Email</span>
+                        <input type="email" name="email" placeholder="Email" ng-model="main.user.email" ng-minlength="1" ng-required="true" ng-pattern="/^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/">
+                        <i class="ion ion-close-round animated delay-4" ng-class="settings.form.email.length ? 'fadeIn' : 'fadeOut'" ng-click="settings.form.email = ''" ng-show="settings.form.email.length">&nbsp;</i>
+                    </div>
+                    <div class="item item-input item-floating-label">
+                        <span class="input-label">Nickname</span>
+                        <input type="text" name="name" placeholder="Nickname" ng-model="main.user.displayName" ng-minlength="3" ng-required="true" ng-maxlength="16">
+                        <i class="ion ion-close-round animated delay-4" ng-class="settings.form.name.length ? 'fadeIn' : 'fadeOut'" ng-click="settings.form.name = ''" ng-show="settings.form.name.length">&nbsp;</i>
+                    </div>
+                    <div class="item item-input item-floating-label">
+                        <span class="input-label">Password</span>
+                        <input type="password" name="password" placeholder="Password" ng-model="password" ng-minlength="6" >
+                        <i class="ion ion-close-round animated delay-4" ng-class="settings.form.password.length ? 'fadeIn' : 'fadeOut'" ng-click="settings.form.password = ''" ng-show="settings.form.password.length">&nbsp;</i>
+                    </div>
+                    <div class="item item-input item-floating-label">
+                        <span class="input-label">Confirm New Password</span>
+                        <input type="password" name="confirmPassword" placeholder="Confirm New Password" ng-model="confirmPassword" compare-to="settings.form.password" >
+                        <i class="ion ion-close-round animated" ng-class="settings.form.confirmPassword.length ? 'fadeIn' : 'fadeOut'" ng-click="settings.form.confirmPassword = ''" ng-show="settings.form.confirmPassword.length">&nbsp;</i>
+                    </div>
+                    <ul class="list custom-checkbox gender">
+                        <li class="item item-checkbox label-checkbox">
+                            Gender
+                        </li>
+                        <li class="item item-checkbox">
+                            <label class="checkbox">
+                                <input type="radio" name="gender" ng-model="gender" value="Male">
+                            </label>
+                            Male
+                        </li>
+                        <li class="item item-checkbox">
+                            <label class="checkbox">
+                                <input type="radio" name="gender" ng-model="gender" value="Female">
+                            </label>
+                            Female
+                        </li>
+                    </ul>
+                    <div class="save_settings">
+                        <button type="submit" class="button button-stable">
+                            Save Settings
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <div ng-if="false">
+                <div class="item item-divider">
+                    <span class="animated bounceInLeft">CONTACT US</span>
+                </div>
+                <a class="item" ng-click="settings.featureRequest()">
+                    <i class="icon ion-star ion" style="color:#f1c40f;"></i>&nbsp;Request a Feature
+                </a>
+                <a class="item" ng-click="settings.bugReport()">
+                    <i class="icon ion-bug ion" style="color:#2980b9;"></i>&nbsp;Report a Bug
+                </a>
+            </div>
+        </div>
+        <div class="user_buttons">
+            <button class="button button-outline button-dark" ng-click="main.logout()">
+                Log Out
+            </button>
+            <button class="button button-outline button-assertive" ng-click="settings.deleteAccount()" ng-if="main.user.provider === 'Password'">
+                Delete Account
+            </button>
+        </div>
+    </ion-content>
+</ion-view>

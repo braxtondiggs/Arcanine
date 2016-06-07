@@ -21,6 +21,10 @@ function UtilsService() {
 		}
 	}
 
+	function toSlug(artist) {
+		return artist.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+	}
+
 	function unitConvert(unit, m) {
 		var KM_TO_MILES = 0.621371;
 		var MILES_TO_KM = 1.60934;
@@ -30,6 +34,7 @@ function UtilsService() {
 	var service = {
 		checkImage: checkImage,
 		convertSlug: convertSlug,
+		toSlug: toSlug,
 		unitConvert: unitConvert
 	};
 

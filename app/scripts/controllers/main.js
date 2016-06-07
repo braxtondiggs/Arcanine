@@ -1,6 +1,6 @@
 'use strict';
 
-function AppCtrl($scope, $rootScope, $state, $ionicModal, $ionicSlideBoxDelegate, $cordovaKeyboard, $cordovaDialogs, $ionicSideMenuDelegate, $ionicHistory, $localStorage) {
+function AppCtrl($scope, $rootScope, $state, $ionicModal, $ionicSlideBoxDelegate, $cordovaKeyboard, $cordovaDialogs, $ionicSideMenuDelegate, $ionicHistory, $localStorage, Auth, User, Queue, currentAuth, lodash) {
 	var vm = this;
 	$ionicModal.fromTemplateUrl('templates/modal/login.tmpl.html', {
 		scope: $scope,
@@ -9,6 +9,21 @@ function AppCtrl($scope, $rootScope, $state, $ionicModal, $ionicSlideBoxDelegate
 	}).then(function(modal) {
 		vm.modal = modal;
 		vm.login = {};
+	});
+	vm.auth = Auth;
+	vm.user = currentAuth;
+	vm.auth.$onAuth(function(authData) {
+		if (authData && lodash.isUndefined(vm.user)) {
+			if (authData.provider === 'password') {
+				User.get(authData.uid).$loaded().then(function(user) {
+					vm.user = user;
+					$rootScope.user = vm.user;
+				});
+			}else {
+				vm.user = authData[authData.provider];
+				$rootScope.user = vm.user;
+			}
+		}
 	});
 
 	$rootScope.openLogin = function() {
@@ -45,6 +60,9 @@ function AppCtrl($scope, $rootScope, $state, $ionicModal, $ionicSlideBoxDelegate
 					$ionicSideMenuDelegate.toggleLeft();
 				}
 				$localStorage.$reset();
+				Auth.$unauth();
+				delete vm.user;
+
 				var current = $ionicHistory.currentView();
 				if (current.stateName === 'app.settings' || current.stateName === 'app.profile') {
 					$state.transitionTo('app.dashboard');

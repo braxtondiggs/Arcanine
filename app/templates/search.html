@@ -6,7 +6,7 @@
             <a class="ion-close clear-search" ng-show="search.term.length > 2" ng-click="search.term = ''"></a>
         </form>
     </ion-nav-title>
-    <ion-content scroll="false"><!-- ng-class="{'has-footer': queue.length}">-->
+    <ion-content scroll="false" ng-class="{'has-footer': queueList.length}">
          <ion-tabs class="tabs-icon-only tabs-striped text-only tabs-color-light">
             <ion-tab title="Tracks" on-select="search.onChange('videos')">
                 <ion-nav-view>

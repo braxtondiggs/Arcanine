@@ -1,25 +1,24 @@
 'use strict';
 
-function VenueCtrl($scope, $http, $cordovaGeolocation, $cordovaDialogs, $ionicScrollDelegate, lodash, Loading, Auth, ENV, User, Utils, Player) {
+function VenueCtrl($scope, $state, $http, $firebaseArray, $cordovaGeolocation, $cordovaDialogs, $ionicHistory, $ionicScrollDelegate, lodash, Loading, Auth, ENV, User, Utils, Player, currentAuth) {
 	var vm = this;
 	vm.auth = Auth;
 	vm.user = {};
-	vm.players = [];
+	vm.players = {};
 	vm.loaded = false;
 	vm.manual = false;
 	var geoFire = new GeoFire(new Firebase(ENV.FIREBASE_URL + 'Locations/Player'));
-	vm.auth.$onAuth(function(authData) {
-		if (authData) {
-			vm.user = authData[authData.provider];
-		}
-		vm.getLocation();
-	});
+	vm.user = currentAuth;
 
 	$scope.$watch(angular.bind(this, function() {
 		return this.user.location;
-	}), function(location, old) {
+	}), function(location) {
 		if (!lodash.isUndefined(location)) {
-			User.update(vm.user);
+			var obj = {
+				id: vm.user.id,
+				location: vm.user.location
+			};
+			User.update(obj);
 			var query = geoFire.query({
 				center: [location.lat, location.lng],
 				radius: 24 //15mi
@@ -31,7 +30,7 @@ function VenueCtrl($scope, $http, $cordovaGeolocation, $cordovaDialogs, $ionicSc
 			query.on('key_entered', function(key, location, distance) {
 				Player.get(key).$loaded().then(function(venue) {
 					venue.distance = distance;
-					vm.players.push(venue);
+					vm.players[venue.$id] = venue;
 				});
 			});
 		}
@@ -82,12 +81,60 @@ function VenueCtrl($scope, $http, $cordovaGeolocation, $cordovaDialogs, $ionicSc
 			Loading.hide();
 		});
 	};
-	vm.join = function(index) {
+	vm.join = function(player) {
+		function connect() {
+			Player.getConnected(player.$id).$add(vm.user.id).then(function(ref) {
+				var obj = {
+					id: vm.user.id,
+					connected: {
+						id: ref.key(),
+						player: player.$id
+					}
+				};
+				User.update(obj);
+				$cordovaDialogs.alert('You have succesfully connect to this player', 'Alma').then(function() {
+					$state.transitionTo('app.dashboard');
+					$ionicHistory.nextViewOptions({
+						historyRoot: true
+					});
+				});
+			});
+		}
+
+		function disconnect(rooms, callback) {
+			if (!lodash.isNull(rooms.$getRecord(vm.user.connected.id))) {
+				var room = rooms.$getRecord(vm.user.connected.id);
+				rooms.$remove(room).then(function() {
+					var obj = {
+						id: vm.user.id,
+						connected: null
+					};
+					User.update(obj);
+					callback();
+				}, function(err) {
+					console.log(err);
+				});
+			}else {
+				callback();
+			}
+		}
 		$cordovaDialogs.confirm('Are you sure you want to connect to this player?', 'Alma', ['Connect', 'Cancel']).then(function(res) {
-			if (res ===1) {
+			if (res === 1) {
+				Player.getConnected(player.$id).$loaded().then(function(rooms) {
+					if (vm.user.connected.id) {
+						if (lodash.isNull(rooms.$getRecord(vm.user.connected.id)) || vm.user.connected.id !== rooms.$getRecord(vm.user.connected.id).$id) {
+							disconnect(rooms, function() {
+								connect();
+							});
+						}
+					} else {
+						connect();
+					}
+				});
 			}
 		});
 	};
+	vm.getLocation();
 }
 
 angular.module('arcanine.controllers').controller('VenueCtrl', VenueCtrl);

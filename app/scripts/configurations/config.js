@@ -7,7 +7,33 @@ function appRoute($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 			abstract: true,
 			templateUrl: 'templates/menu.html',
 			controller: 'AppCtrl',
-			controllerAs: 'main'
+			controllerAs: 'main',
+			resolve: {
+				currentAuth: ['$rootScope', 'User', '$q', 'Auth', 'Queue', 'Loading', function($rootScope, User, $q, Auth, Queue, Loading) {
+					Loading.show();
+					var deferred = $q.defer();
+					Auth.$waitForAuth().then(function(authData) {
+						if (authData) {
+							if (authData.provider === 'password') {
+								User.get(authData.uid).$loaded().then(function(user) {
+									Loading.hide();
+									$rootScope.user = user;
+									deferred.resolve(user);
+								});
+							} else {
+								Loading.hide();
+								$rootScope.user = authData[authData.provider];
+								deferred.resolve(authData[authData.provider]);
+							}
+						} else {
+							Loading.hide();
+							deferred.resolve();
+						}
+					});
+					return deferred.promise;
+				}]
+
+			}
 		})
 		.state('app.dashboard', {
 			url: '/dashboard',
@@ -37,13 +63,91 @@ function appRoute($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 					controllerAs: 'search'
 				}
 			}
-		}).state('app.venue', {
+		})
+		.state('app.artist', {
+			url: '/artist/:action/:artistId',
+			views: {
+				'menuContent': {
+					templateUrl: 'templates/artist.html',
+					controller: 'ArtistCtrl',
+					controllerAs: 'artist',
+					resolve: {
+						'Artist': ['$q', '$stateParams', 'ArtistService', '$cordovaDialogs', '$ionicHistory', function($q, $stateParams, ArtistService, $cordovaDialogs, $ionicHistory) {
+							function notFound() {
+								$cordovaDialogs.alert('We are having trouble getting this artists information right now. Our data is constantly changing, so check back later', 'Alma - Error').then(function() {
+									$ionicHistory.goBack(-1);
+								});
+							}
+							var deferred = $q.defer();
+							if ($stateParams.action === 'id') {
+								ArtistService.getInfo($stateParams.artistId).then(function(artist) {
+									deferred.resolve(artist);
+								}, function(err) {
+									notFound();
+									deferred.reject(err);
+								});
+							} else if ($stateParams.action === 'slug') {
+								ArtistService.getSlug($stateParams.artistId).then(function(artist) {
+									deferred.resolve(artist);
+								}, function(err) {
+									notFound();
+									deferred.reject(err);
+								});
+							}
+							return deferred.promise;
+						}]
+					}
+				}
+			}
+		})
+		.state('app.venue', {
 			url: '/venue',
 			views: {
 				'menuContent': {
 					templateUrl: 'templates/venue.html',
 					controller: 'VenueCtrl',
 					controllerAs: 'venue'
+				}
+			}
+		})
+		.state('app.profile', {
+			url: '/profile/:id',
+			views: {
+				'menuContent': {
+					templateUrl: 'templates/profile.html',
+					controller: 'ProfileCtrl',
+					controllerAs: 'profile',
+					resolve: {
+						'profileUser': ['User', '$q', '$stateParams', 'Loading', function(User, $q, $stateParams, Loading) {
+							Loading.show();
+							var deferred = $q.defer();
+							User.get($stateParams.id).$loaded().then(function(user) {
+								Loading.hide();
+								if (user.provider) {
+									deferred.resolve(user);
+								} else {
+									deferred.reject();
+								}
+							});
+							return deferred.promise;
+						}]
+
+					}
+				}
+			}
+		})
+		.state('app.settings', {
+			url: '/settings',
+			views: {
+				'menuContent': {
+					templateUrl: 'templates/settings.html',
+					controller: 'SettingsCtrl',
+					controllerAs: 'settings',
+					resolve: {
+						'currentAuth': ['Auth', function(Auth) {
+							return Auth.$requireAuth();
+						}]
+					}
 				}
 			}
 		});
@@ -77,5 +181,5 @@ function appIdentify($ionicAppProvider) {
 
 angular.module('arcanine.config')
 	.config(appRoute);
-	//.config(appRate)
-	//.config(appIdentify);
+//.config(appRate)
+//.config(appIdentify);

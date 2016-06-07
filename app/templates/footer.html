@@ -1,0 +1,12 @@
+<ion-footer-bar align-title="left" class="footer-bar animated" ng-class="queueList.length > 0? 'bounceInUp':'bounceOutDown'" ng-show="queueList.length > 0" ng-controller="QueueCtrl as queue">
+    <div class="row" ng-click="queue.open()">
+        <div class="col-20 col" >
+            <img ng-src="{{queueList[0].image.o}}" src="images/logo_missing.png" />
+        </div>
+        <div class="col col-50">
+            <h2>{{queueList[0].artists[0].name}}</h2>
+            <p>{{queueList[0].song_title}}</p>
+        </div>
+        <div class="col-30 col"></div>
+    </div>
+</ion-footer-bar>
