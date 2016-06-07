@@ -12,3 +12,4 @@ plugins
 *.DS_Store
 www/bower_components
 app/scripts/configuration.js
+keys/release.keystore
