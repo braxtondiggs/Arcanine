@@ -1,6 +1,6 @@
 'use strict';
 
-function QueueCtrl($scope, $rootScope, $state, $ionicModal, $cordovaKeyboard, Queue) {
+function QueueCtrl($scope, $rootScope, $state, $ionicModal, $cordovaKeyboard, $cordovaDialogs, Queue) {
 	var vm = this;
 	$rootScope.$watch('user.connected', function(conn) {
 		if (conn) {
@@ -34,6 +34,16 @@ function QueueCtrl($scope, $rootScope, $state, $ionicModal, $cordovaKeyboard, Qu
 			$cordovaKeyboard.disableScroll(true);
 		}
 		vm.modal.show();
+	};
+
+	vm.remove = function(track) {
+		$cordovaDialogs.confirm('Are you sure you want to delete this video from the queue?', 'Alma', ['Delete','Cancel']).then(function(res) {
+			if (res === 1) {
+				Queue.remove(track).then(function (){
+					$cordovaDialogs.alert('Your video has successfully been removed from the queue', 'Alma');
+				});
+			}
+		});
 	};
 
 }

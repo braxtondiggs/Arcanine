@@ -13,15 +13,8 @@
                 <h2>{{track.artists[0].name}}</h2>
                 <p>{{track.song_title}}</p>
                 <ion-option-button class="button-balanced"><i class="ion-arrow-graph-up-left icon"></i></ion-option-button>
+                <ion-option-button class="button-assertive icon ion-trash-a" ng-click="queue.remove(track)" ng-if="track.user === main.user.$id"></ion-option-button>
             </ion-item>
-            <!--<ion-item class="item item-thumbnail-left item-remove-animate" href="#/app/artist/slug/{{track.id}}" ng-repeat="video in queueList"> | orderBy: '-counter'" on-hold="activateVote(video)" ng-if="!video.get('isActive')">
-                <img ng-src="{{video.get('image')}}">
-                <i class="icon ion-chevron-right icon-accessory"></i>
-                <h2>{{track.image.o}}</h2>
-                <p>{{track.song_title}}</p>
-                <ion-option-button class="button-balanced><i class="ion-arrow-graph-up-left icon"></i></ion-option-button>
-                <ion-option-button class="button-assertive icon ion-trash-a" ng-click="deleteSong($index)" ng-if="video.get('userId').id === currentUser.id"></ion-option-button>
-            </ion-item>-->
         </ion-list>
         <p ng-show="!queueList.length" class="empty-list">Is it quiet in here? No music is playing. Be the first!</p>
     </ion-content>

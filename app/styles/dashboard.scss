@@ -1,0 +1,168 @@
+@import '_colors.scss';
+.setup {
+    text-align: center;
+    p {
+        margin: 20px;
+    }
+    .setup_buttons {
+        button {
+            min-width: 130px;
+        }
+        .button-positive {
+            background-color: transparent;
+            border-color: $coloredLinks;
+            color: $coloredLinks;
+            margin-right: 10px;
+            &.activated {
+                background-color: $coloredLinksActivated;
+                color: #FFF;
+            }
+        }
+        .button-default {
+            background-color: transparent;
+            border-color: $textColor;
+            color: $textColor;
+            &.activated {
+                background-color: $textColor;
+                color: #000;
+            }
+        }
+    }
+}
+
+.dashboard {
+    .video-image {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 0;
+        opacity: .4;
+        background-repeat: no-repeat;
+        -webkit-filter: blur(3px);
+        -moz-filter: blur(3px);
+        -o-filter: blur(3px);
+        -ms-filter: blur(3px);
+        filter: blur(3px);
+        width: 100%;
+        margin-top: -25%;
+        height: 100%;
+    }
+    .chat-content {
+        padding: 10px;
+        overflow: hidden;
+    }
+    .chat-convo {
+        margin: 0;
+        .chat-item {
+            .chat-img {
+                display: inline-block;
+                img {
+                    width: 50px;
+                    height: 50px;
+                }
+            }
+            .chat-bubble {
+                position: relative;
+                display: inline-block;
+                vertical-align: top;
+                background: #DDD;
+                -webkit-border-radius: 4px;
+                -moz-border-radius: 4px;
+                border-radius: 4px;
+                margin: 0 10px 0 20px;
+                width: calc(100% - 75px);
+                &:after {
+                    content: '';
+                    position: absolute;
+                    border-style: solid;
+                    border-width: 9px 14px 9px 0;
+                    border-color: transparent #DDD;
+                    display: block;
+                    width: 0;
+                    z-index: 1;
+                    left: -14px;
+                    top: 8px;
+                }
+                h2 {
+                    color: $coloredLinks;
+                }
+                p {
+                    white-space: initial;
+                }
+            }
+            .chat-timestamp {
+                text-align: right;
+                margin-top: 5px;
+                p {
+                    font-size: 12px;
+                    color: $coloredLinks;
+                }
+            }
+            &.isSelf {
+                .chat-img {
+                    float: right;
+                }
+                .chat-bubble {
+                    text-align: right;
+                    margin: 0 10px 0 0;
+                    &:after {
+                        border-width: 9px 0 9px 14px;
+                        left: initial;
+                        right: -14px;
+                    }
+                }
+                .chat-timestamp {
+                    text-align: left;
+                    p {
+                        color: $coloredLinks;
+                    }
+                }
+            }
+        }
+    }
+    .chat-write {
+        text-align: center;
+        label {
+            background-color: transparent;
+            display: inline-block;
+            padding: 0;
+            width: calc(100% - 105px);
+            float: left;
+            position: relative;
+        }
+        #chat-input {
+            font-size: 18px;
+            float: left;
+            height: 100%;
+            width: calc(100% - 95px);
+            background: transparent;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 4px 15px 0;
+            color: $coloredLinks;
+            border-radius: 4px;
+            resize: none!important;
+            outline: none;
+            line-height: initial;
+            &::-webkit-input-placeholder {
+                color: rgba(204, 96, 85, .2);
+            }
+        }
+        .chat-image {
+            float: left;
+            font-size: 28px;
+            color: $coloredLinks;
+            ;
+            padding: 5px;
+        }
+        .dashbord-image {
+            float: left;
+            height: 31px;
+        }
+        .button {
+            display: inline-block;
+            margin-left: 5px;
+            line-height: 31px;
+        }
+    }
+}

@@ -1,7 +1,8 @@
 'use strict';
 
-function SearchCtrl($scope, $http, $localStorage, $timeout, lodash, $cordovaKeyboard, $ionicTabsDelegate, Loading, ENV, Utils) {
+function SearchCtrl($scope, $state, $http, $localStorage, $timeout, lodash, $cordovaKeyboard, $cordovaDialogs, $ionicTabsDelegate, Loading, ENV, Utils, Queue, currentAuth) {
 	var vm = this;
+	vm.user = currentAuth;
 	vm.term = '';
 	vm.changed = false;
 	vm.action = ($ionicTabsDelegate.selectedIndex() === 0) ? 'videos' : 'entities';
@@ -57,10 +58,11 @@ function SearchCtrl($scope, $http, $localStorage, $timeout, lodash, $cordovaKeyb
 				};
 				if ($ionicTabsDelegate.selectedIndex() === 1) {
 					vm[vm.action].resultsTop = lodash.filter(data.results, function(item) {
-						return vm.convertSlug(item.name, item.slug).toLowerCase().indexOf(vm.term.toLowerCase()) > -1;
+						console.log(vm.convertSlug(item.name, item.slug));
+						return vm.convertSlug(item.name, item.slug).toString().toLowerCase().indexOf(vm.term.toLowerCase()) > -1;
 					});
 					vm[vm.action].results = lodash.filter(data.results, function(item) {
-						return vm.convertSlug(item.name, item.slug).toLowerCase().indexOf(vm.term.toLowerCase()) === -1;
+						return vm.convertSlug(item.name, item.slug).toString().toLowerCase().indexOf(vm.term.toLowerCase()) === -1;
 					});
 					if (lodash.isEmpty(vm[vm.action].resultsTop)) {
 						delete vm[vm.action].resultsTop;
@@ -99,8 +101,20 @@ function SearchCtrl($scope, $http, $localStorage, $timeout, lodash, $cordovaKeyb
 			vm.changed = false;
 		}
 	};
-	vm.select = function(index) {
-		//vm[vm.action].results[index]
+	vm.select = function(track) {
+		if (vm.user) {
+			if (vm.user.connected) {
+				$cordovaDialogs.confirm('Are you sure you want add this song?', 'Alma').then(function(res) {
+					if (res === 1) {
+						Queue.add(vm.user.connected.player, track);
+					}
+				});
+			} else {
+				$cordovaDialogs.alert('You have not connected to an Alma yet.', 'Alma - Error').then(function() {
+					$state.transitionTo('app.venue');
+				});
+			}
+		}
 	};
 	vm.checkImage = function(img) {
 		return Utils.checkImage(img);

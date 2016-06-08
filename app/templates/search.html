@@ -12,7 +12,7 @@
                 <ion-nav-view>
                     <ion-content>
                         <div class="list more dark-list ordered" ng-show="search.videos.results.length">
-                            <a class="item item-thumbnail-left" collection-repeat="track in search.videos.results" item-height="91px" ng-click="search.select($index)">
+                            <a class="item item-thumbnail-left" collection-repeat="track in search.videos.results" item-height="91px" ng-click="search.select(track)">
                                 <img ng-src="{{track.image.o}}" err-src="images/logo_missing.png" />
                                 <i class="icon ion-play icon-accessory"></i>
                                 <h2>{{track.artists[0].name}}</h2>
