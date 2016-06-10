@@ -5,7 +5,7 @@ function QueueCtrl($scope, $rootScope, $state, $ionicModal, $cordovaKeyboard, $c
 	$rootScope.votes = {};
 	$rootScope.$watch('user.connected', function(conn) {
 		if (conn) {
-			Queue.get(conn.player).$loaded().then(function(queue) {
+			Queue.get().$loaded().then(function(queue) {
 				$rootScope.queueList = queue;
 			});
 		}
@@ -48,7 +48,7 @@ function QueueCtrl($scope, $rootScope, $state, $ionicModal, $cordovaKeyboard, $c
 	};
 
 	vm.vote = function(track, vote) {
-		Queue.vote($rootScope.user.connected.player, track.$id, vote);
+		Queue.vote(track.$id, vote);
 	};
 	vm.status = function(vote) {
 		return (!angular.isDefined(vote)) ? false : !vote;

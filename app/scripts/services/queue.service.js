@@ -1,51 +1,49 @@
 'use strict';
 
-function QueueService($rootScope, $http, $firebaseArray, $firebaseObject, $cordovaDialogs, lodash, Loading, Player, User, ENV) {
-	function ref(id) {
-		return Player.ref(id).child('queue');
+function QueueService($rootScope, $http, $firebaseArray, $firebaseObject, $cordovaDialogs, lodash, Loading, Player, ENV) {
+	function ref() {
+		return Player.ref().child('queue');
 	}
 
-	function refTrack(id, trackId) {
-		return ref(id).child(trackId);
+	function refTrack(trackId) {
+		return ref().child(trackId);
 	}
 
-	function refAllVotes(id, trackId) {
-		return refTrack(id, trackId).child('votes');
+	function refAllVotes(trackId) {
+		return refTrack(trackId).child('votes');
 	}
 
-	function refVote(id, trackId) {
-		return refAllVotes(id, trackId).child($rootScope.user.id);
+	function refVote(trackId) {
+		return refAllVotes(trackId).child($rootScope.user.id);
 	}
 
-	function get(id) {
-		return $firebaseArray(ref(id));
+	function get() {
+		return $firebaseArray(ref());
 	}
 
-	function getVotes(id, trackId) {
-		return $firebaseArray(refAllVotes(id, trackId));
+	function getVotes(trackId) {
+		return $firebaseArray(refAllVotes(trackId));
 	}
 
 	function add(track) {
-		User.auth($rootScope.user).then(function() {
-			$cordovaDialogs.confirm('Are you sure you want add this song?', 'Alma').then(function(res) {
-				if (res === 1) {
-					if (check(track)) {
-						Loading.show();
-						$http({
-							method: 'GET',
-							url: ENV.apiEndpoint + 'artists/find/' + track.id,
-						}).success(function(data) {
-							data.user = $rootScope.user.id;
-							get($rootScope.user.connected.player).$add(data).then(function() {
-								$cordovaDialogs.alert('Your song is now in the queue!', 'Alma');
-								Loading.hide();
-							});
+		$cordovaDialogs.confirm('Are you sure you want add this song?', 'Alma').then(function(res) {
+			if (res === 1) {
+				if (check(track)) {
+					Loading.show();
+					$http({
+						method: 'GET',
+						url: ENV.apiEndpoint + 'artists/find/' + track.id,
+					}).success(function(data) {
+						data.user = $rootScope.user.id;
+						get().$add(data).then(function() {
+							$cordovaDialogs.alert('Your song is now in the queue!', 'Alma');
+							Loading.hide();
 						});
-					} else {
-						$cordovaDialogs.alert('Looks like this song is already in the Queue.', 'Alma - Error');
-					}
+					});
+				} else {
+					$cordovaDialogs.alert('Looks like this song is already in the Queue.', 'Alma - Error');
 				}
-			});
+			}
 		});
 	}
 
@@ -55,21 +53,19 @@ function QueueService($rootScope, $http, $firebaseArray, $firebaseObject, $cordo
 		}));
 	}
 
-	function remove(id, track) {
-		return get(id).$remove(track);
+	function remove(track) {
+		return get().$remove(track);
 	}
 
-	function vote(id, trackId, status) {
-		User.auth($rootScope.user).then(function() {
-			refTrack(id, trackId).once('value', function(snapshot) {
-				if (status !== snapshot.child('votes/' + $rootScope.user.id).val()) {
-					var incr = (Boolean(status)) ? 1 : -1;
-					var prior = parseInt(snapshot.getPriority(), 10);
-					prior += incr;
-					snapshot.child('votes/' + $rootScope.user.id).ref().set(status);
-					snapshot.ref().setPriority(prior);
-				}
-			});
+	function vote(trackId, status) {
+		refTrack(trackId).once('value', function(snapshot) {
+			if (status !== snapshot.child('votes/' + $rootScope.user.id).val()) {
+				var incr = (Boolean(status)) ? 1 : -1;
+				var prior = parseInt(snapshot.getPriority(), 10);
+				prior += incr;
+				snapshot.child('votes/' + $rootScope.user.id).ref().set(status);
+				snapshot.ref().setPriority(prior);
+			}
 		});
 	}
 

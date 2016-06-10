@@ -6,18 +6,21 @@ function VenueCtrl($scope, $rootScope, $state, $http, $firebaseArray, $cordovaGe
 	vm.players = {};
 	vm.loaded = false;
 	vm.manual = false;
+	vm.location = {};
 	var geoFire = new GeoFire(new Firebase(ENV.FIREBASE_URL + 'Locations/Player'));
 	$rootScope.user = currentAuth;
 
 	$scope.$watch(angular.bind(this, function() {
-		return this.user.location;
+		return this.location;
 	}), function(location) {
-		if (!lodash.isUndefined(location)) {
-			var obj = {
-				id: $rootScope.user.id,
-				location: $rootScope.user.location
-			};
-			User.update(obj);
+		if (!lodash.isEmpty(location)) {
+			if ($rootScope.user && $rootScope.user.id) {
+				var obj = {
+					id: $rootScope.user.id,
+					location: vm.location
+				};
+				User.update(obj);
+			}
 			var query = geoFire.query({
 				center: [location.lat, location.lng],
 				radius: 24 //15mi
@@ -25,6 +28,8 @@ function VenueCtrl($scope, $rootScope, $state, $http, $firebaseArray, $cordovaGe
 			query.on('ready', function() {
 				Loading.hide();
 				vm.loaded = true;
+				vm.manual = false;
+				$scope.$broadcast('scroll.refreshComplete');
 			});
 			query.on('key_entered', function(key, location, distance) {
 				Player.get(key).$loaded().then(function(venue) {
@@ -41,7 +46,7 @@ function VenueCtrl($scope, $rootScope, $state, $http, $firebaseArray, $cordovaGe
 			timeout: 10000,
 			enableHighAccuracy: false
 		}).then(function(position) {
-			$rootScope.user.location = {
+			vm.location = {
 				lat: position.coords.latitude,
 				lng: position.coords.longitude
 			};
@@ -56,6 +61,7 @@ function VenueCtrl($scope, $rootScope, $state, $http, $firebaseArray, $cordovaGe
 	};
 
 	vm.refresh = function() {
+		vm.loaded = false;
 		vm.getLocation();
 	};
 	vm.reset = function() {
@@ -73,7 +79,7 @@ function VenueCtrl($scope, $rootScope, $state, $http, $firebaseArray, $cordovaGe
 		}).then(function(response) {
 			if (response.data[0]) {
 				vm.players = [];
-				$rootScope.user.location = { lat: parseFloat(response.data[0].lat), lng: parseFloat(response.data[0].lon) };
+				vm.location = { lat: parseFloat(response.data[0].lat), lng: parseFloat(response.data[0].lon) };
 				vm.manual = false;
 				$ionicScrollDelegate.scrollTop(true);
 			}
@@ -105,7 +111,7 @@ function VenueCtrl($scope, $rootScope, $state, $http, $firebaseArray, $cordovaGe
 				var room = rooms.$getRecord($rootScope.user.connected.id);
 				rooms.$remove(room).then(function() {
 					var obj = {
-						id: vm.user.id,
+						id: $rootScope.user.id,
 						connected: null
 					};
 					User.update(obj);
@@ -113,14 +119,14 @@ function VenueCtrl($scope, $rootScope, $state, $http, $firebaseArray, $cordovaGe
 				}, function(err) {
 					console.log(err);
 				});
-			}else {
+			} else {
 				callback();
 			}
 		}
 		$cordovaDialogs.confirm('Are you sure you want to connect to this player?', 'Alma', ['Connect', 'Cancel']).then(function(res) {
 			if (res === 1) {
 				Player.getConnected(player.$id).$loaded().then(function(rooms) {
-					if (vm.user.connected.id) {
+					if ($rootScope.user.connected && $rootScope.user.connected.id) {
 						if (lodash.isNull(rooms.$getRecord($rootScope.user.connected.id)) || $rootScope.user.connected.id !== rooms.$getRecord($rootScope.user.connected.id).$id) {
 							disconnect(rooms, function() {
 								connect();

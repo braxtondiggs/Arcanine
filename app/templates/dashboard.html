@@ -1,14 +1,11 @@
 <ion-view view-title="Dashboard" ng-style="{'background-image':'url(images/BG.png)'}" class="dashboard">
     <ion-content ng-class="{'has-footer': queueList.length}">
         <div class="list chat-convo dark-list">
-            <div class="setup" ng-show="!$storage.hasSetupDashboard && !chats.length" ng-class="{'rubberBand animated': !$storage.hasSetupDashboard && !chats.length}">
+            <div class="setup" ng-show="!chats.length" ng-class="{'rubberBand animated': !chats.length}">
                 <p>Welcome to Alma! Playing music videos have never been so easy, with Alma you have access to thousands of videos at your finger tips. You need to be connected to an Alma Player inorder to get started. Press "Get Started" below for a quick tutorial.</p>
                  <div class="setup_buttons">
-                    <button class="button button-positive" ng-click="dashboard.startTutorial()">
+                    <button class="button button-positive" ng-click="dashboard.tutorial()">
                         Get Started
-                    </button>
-                    <button class="button button-default" ng-click="dashboard.skipTutorial()">
-                        Skip
                     </button>
                 </div>
             </div>
@@ -28,12 +25,12 @@
                     <p><i class="ion-clock">&nbsp;</i>{{chat.createdAt}}</p>
                 </div>
             </div>
-            <p ng-show="!chats.length && $storage.hasSetupDashboard" class="empty-list">No one has started to chat. Be the first!</p>
+            <p ng-show="!chats.length" class="empty-list">No one has started to chat. Be the first!</p>
         </div>
        
     </ion-content>
-    <ion-subfooter-bar align-title="left" class="bar chat-write animated flipInX delay-6" ng-class="queue.length > 0? 'bar-subfooter' : 'bar-footer'">
-        <i class="icon ion-ios-camera-outline chat-image" ng-click="dashboard.attachImage()" ng-if="!dashboard.image && false"></i>
+    <ion-subfooter-bar align-title="left" class="bar chat-write animated flipInX delay-6" ng-class="queueList.length > 0? 'bar-subfooter' : 'bar-footer'">
+        <i class="icon ion-ios-camera-outline chat-image" ng-click="dashboard.attachImage()" ng-if="!dashboard.image"></i>
         <img ng-src="{{dashboard.image}}" ng-if="dashboard.image && false" class="dashbord-image" ng-click="dashboard.changeImage()" />
         <input type="text" id="chat-input" placeholder="Tap to write message..." ng-model="dashboard.chat.chatMsg" ng-keyup="dashboard.getKeys($event)">
         <button class="button button-small button-outline dark-button" ng-click="dashboard.sendChat(dashboard.chat.chatMsg);dashboard.chat.chatMsg = '';" ng-disabled="!dashboard.chat.chatMsg || dashboard.chat.chatMsg === ''">Send</button>

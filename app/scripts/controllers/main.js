@@ -1,6 +1,6 @@
 'use strict';
 
-function AppCtrl($scope, $rootScope, $state, $ionicModal, $ionicSlideBoxDelegate, $cordovaKeyboard, $cordovaDialogs, $ionicSideMenuDelegate, $ionicHistory, $localStorage, Auth, User, Queue, currentAuth, lodash) {
+function AppCtrl($scope, $rootScope, $state, $ionicModal, $ionicSlideBoxDelegate, $cordovaKeyboard, $cordovaDialogs, $ionicSideMenuDelegate, $ionicHistory, $localStorage, Auth, User, currentAuth, lodash) {
 	var vm = this;
 	$ionicModal.fromTemplateUrl('templates/modal/login.tmpl.html', {
 		scope: $scope,
@@ -14,13 +14,13 @@ function AppCtrl($scope, $rootScope, $state, $ionicModal, $ionicSlideBoxDelegate
 	$rootScope.user = currentAuth;
 	vm.auth.$onAuth(function(authData) {
 		if (authData && lodash.isUndefined($rootScope.user)) {
-			if (authData.provider === 'password') {
-				User.get(authData.uid).$loaded().then(function(user) {
-					$rootScope.user = user;
-				});
-			}else {
-				$rootScope.user = authData[authData.provider];
-			}
+			var id = (authData.provider !== 'password') ? authData[authData.provider].id : authData.uid;
+			User.get(id).$loaded().then(function(user) {
+				$rootScope.user = user;
+				if (user.provider !== 'password') {
+					$rootScope.user = user[user.provider];
+				}
+			});
 		}
 	});
 

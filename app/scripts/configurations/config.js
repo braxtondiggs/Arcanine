@@ -14,17 +14,15 @@ function appRoute($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 					var deferred = $q.defer();
 					Auth.$waitForAuth().then(function(authData) {
 						if (authData) {
-							if (authData.provider === 'password') {
-								User.get(authData.uid).$loaded().then(function(user) {
-									Loading.hide();
-									$rootScope.user = user;
-									deferred.resolve(user);
-								});
-							} else {
+							var id = (authData.provider !== 'password') ? authData[authData.provider].id : authData.uid;
+							User.get(id).$loaded().then(function(user) {
+								$rootScope.user = user;
+								if (user.provider !== 'password') {
+									$rootScope.user = user[user.provider];
+								}
 								Loading.hide();
-								$rootScope.user = authData[authData.provider];
-								deferred.resolve(authData[authData.provider]);
-							}
+								deferred.resolve(user);
+							});
 						} else {
 							Loading.hide();
 							deferred.resolve();

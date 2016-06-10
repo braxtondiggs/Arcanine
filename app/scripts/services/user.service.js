@@ -3,25 +3,21 @@
 function UserService($rootScope, $q, $state, $firebaseObject, $cordovaDialogs, ENV) {
 	return {
 		ref: function(id) {
-			return new Firebase(ENV.FIREBASE_URL + 'Users/' + id);
+			var _id = id || $rootScope.user.connected.player;
+			return new Firebase(ENV.FIREBASE_URL + 'Users/' + _id);
 		},
 		get: function(id) {
-			return $firebaseObject(this.ref(id));
+			var _id = id || $rootScope.user.id;
+			return $firebaseObject(this.ref(_id));
 		},
 		update: function(obj) {
 			return this.ref(obj.id).update(obj);
 		},
-		auth: function(user) {
-			var deferred = $q.defer();
+		auth: function() {
+			var deferred = $q.defer(),
+				user = $rootScope.user;
 			if (user) {
-				if (user.connected) {
-					deferred.resolve();
-				} else {
-					$cordovaDialogs.alert('You have not connected to an Alma yet.', 'Alma - Error').then(function() {
-						$state.transitionTo('app.venue');
-						deferred.reject();
-					});
-				}
+				deferred.resolve();
 			} else {
 				$cordovaDialogs.alert('You need to be logged in inorder to complete this action', 'Alma - Error').then(function() {
 					$rootScope.openLogin();
