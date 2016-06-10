@@ -11,17 +11,15 @@ function AppCtrl($scope, $rootScope, $state, $ionicModal, $ionicSlideBoxDelegate
 		vm.login = {};
 	});
 	vm.auth = Auth;
-	vm.user = currentAuth;
+	$rootScope.user = currentAuth;
 	vm.auth.$onAuth(function(authData) {
-		if (authData && lodash.isUndefined(vm.user)) {
+		if (authData && lodash.isUndefined($rootScope.user)) {
 			if (authData.provider === 'password') {
 				User.get(authData.uid).$loaded().then(function(user) {
-					vm.user = user;
-					$rootScope.user = vm.user;
+					$rootScope.user = user;
 				});
 			}else {
-				vm.user = authData[authData.provider];
-				$rootScope.user = vm.user;
+				$rootScope.user = authData[authData.provider];
 			}
 		}
 	});
@@ -61,7 +59,8 @@ function AppCtrl($scope, $rootScope, $state, $ionicModal, $ionicSlideBoxDelegate
 				}
 				$localStorage.$reset();
 				Auth.$unauth();
-				delete vm.user;
+				delete $rootScope.user;
+				delete $rootScope.queueList;
 
 				var current = $ionicHistory.currentView();
 				if (current.stateName === 'app.settings' || current.stateName === 'app.profile') {

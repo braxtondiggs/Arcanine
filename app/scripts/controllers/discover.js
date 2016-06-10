@@ -1,8 +1,7 @@
 'use strict';
 
-function DiscoverCtrl(lodash, $state, $http, $firebaseObject, $cordovaDialogs, ENV, Loading, Queue, currentAuth) {
+function DiscoverCtrl(lodash, $http, $firebaseObject, $cordovaDialogs, ENV, Loading, Queue) {
 	var vm = this;
-	vm.user = currentAuth;
 	vm.get = function(sort) {
 		if (lodash.isUndefined(vm[sort])) {
 			vm[sort] = {
@@ -29,31 +28,17 @@ function DiscoverCtrl(lodash, $state, $http, $firebaseObject, $cordovaDialogs, E
 		}
 	};
 	vm.add = function(track) {
-		if (vm.user) {
-			if (vm.user.connected) {
-				$cordovaDialogs.confirm('Are you sure you want add this song?', 'Alma').then(function(res) {
-					if (res === 1) {
-						Loading.show();
-						$http({
-							method: 'GET',
-							url: ENV.apiEndpoint + 'search',
-							params: {
-								pg: 1,
-								q: track.slug + ' ' + track.slugTitle,
-								s: 'videos'
-							}
-						}).success(function(data) {
-							Queue.add(vm.user.connected.player, data.results[0]);
-							Loading.hide();
-						});
-					}
-				});
-			} else {
-				$cordovaDialogs.alert('You have not connected to an Alma yet.', 'Alma - Error').then(function() {
-					$state.transitionTo('app.venue');
-				});
+		$http({
+			method: 'GET',
+			url: ENV.apiEndpoint + 'search',
+			params: {
+				pg: 1,
+				q: track.slug + ' ' + track.slugTitle,
+				s: 'videos'
 			}
-		}
+		}).success(function(data) {
+			Queue.add(data.results[0]);
+		});
 	};
 }
 

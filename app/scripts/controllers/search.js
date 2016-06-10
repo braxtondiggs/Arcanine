@@ -1,8 +1,7 @@
 'use strict';
 
-function SearchCtrl($scope, $state, $http, $localStorage, $timeout, lodash, $cordovaKeyboard, $cordovaDialogs, $ionicTabsDelegate, Loading, ENV, Utils, Queue, currentAuth) {
+function SearchCtrl($scope, $http, $localStorage, $timeout, lodash, $cordovaKeyboard, $ionicTabsDelegate, Loading, ENV, Utils, Queue) {
 	var vm = this;
-	vm.user = currentAuth;
 	vm.term = '';
 	vm.changed = false;
 	vm.action = ($ionicTabsDelegate.selectedIndex() === 0) ? 'videos' : 'entities';
@@ -102,19 +101,7 @@ function SearchCtrl($scope, $state, $http, $localStorage, $timeout, lodash, $cor
 		}
 	};
 	vm.select = function(track) {
-		if (vm.user) {
-			if (vm.user.connected) {
-				$cordovaDialogs.confirm('Are you sure you want add this song?', 'Alma').then(function(res) {
-					if (res === 1) {
-						Queue.add(vm.user.connected.player, track);
-					}
-				});
-			} else {
-				$cordovaDialogs.alert('You have not connected to an Alma yet.', 'Alma - Error').then(function() {
-					$state.transitionTo('app.venue');
-				});
-			}
-		}
+		Queue.add(track);
 	};
 	vm.checkImage = function(img) {
 		return Utils.checkImage(img);

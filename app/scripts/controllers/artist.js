@@ -1,9 +1,8 @@
 'use strict';
 
-function ArtistCtrl($rootScope, $state, $cordovaDialogs, Artist, ArtistService, Queue, Utils, currentAuth) {
+function ArtistCtrl($rootScope, Artist, ArtistService, Queue, Utils) {
 	var vm = this;
 	vm.info = Artist;
-	vm.user = currentAuth;
 
 	vm.getBio = function() {
 		if (!vm.bio) {
@@ -26,20 +25,7 @@ function ArtistCtrl($rootScope, $state, $cordovaDialogs, Artist, ArtistService, 
 		return Utils.toSlug(name);
 	};
 	$rootScope.queue = function(video) {
-		if (vm.user) {
-			if (vm.user.connected.player) {
-				$cordovaDialogs.confirm('Are you sure you want add this song?', 'Alma').then(function(res) {
-					if (res === 1) {
-						Queue.add(vm.user.connected.player, video);
-					}
-				});
-			} else {
-				$cordovaDialogs.alert('You have not connected to an Alma yet.', 'Alma - Error').then(function() {
-					$state.transitionTo('app.venue');
-				});
-			}
-		}
-
+		Queue.add(video);
 	};
 }
 

@@ -20,7 +20,6 @@
                                 <img class="BGImage" ng-src="{{track.image.o}}" ng-if="track.image.o" />
                                 <span class="counter">{{$index+1}}.</span>
                             </a>
-                            <!--<ion-infinite-scroll on-infinite="search.load()" distance="1%" ng-if="!search.videos.maxed && search.videos.loaded" immediate-check="false"></ion-infinite-scroll>-->
                         </div>
                         <p class="empty-list" ng-show="!search.videos.results.length && search.videos.loaded">It looks like we don't have any music for this section. Check back later!</p>
                         <div class="list list-inset dark-list search search-history"  ng-show="!search.videos.results.length && search.$storage.search.videos.length > 0 && !search.videos.loaded" ng-if="search.$storage.search.videos.length > 0">
@@ -71,7 +70,6 @@
                                 <img class="BGImage" ng-src="{{search.checkImage(artist.image)}}" ng-if="search.checkImage(artist.image).indexOf('logo_missing.png') === -1" />
                                 <span class="counter">{{$index+1}}.</span>
                             </a>
-                            <!--<ion-infinite-scroll on-infinite="search.load()" distance="1%" ng-if="!search.entities.maxed && search.entities.loaded" immediate-check="false"></ion-infinite-scroll>-->
                         </div>
                         <p class="empty-list" ng-show="!search.entities.results.length && search.entities.loaded">It looks like we don't have any music for this section. Check back later!</p>
                         <div class="list list-inset dark-list search search-history" ng-show="!search.entities.results.length && search.$storage.search.entities.length > 0 && !search.entities.loaded"  ng-if="search.$storage.search.entities.length > 0">
@@ -91,23 +89,6 @@
                             </div>
                             <p class="center">Use the searh bar above to find artist</p>
                         </div>
-                    </ion-content>
-                </ion-nav-view>
-            </ion-tab>
-            <ion-tab title="Playlists" ng-if="false">
-                <ion-nav-view>
-                    <ion-content>
-                        <div class="list more dark-list ordered" ng-show="search.playlist.results.length">
-                            <a class="item item-thumbnail-left" collection-repeat="playlist in search.playlist.results" item-height="91px">
-                                <img ng-src="{{playlist.get('image')}}" err-src="images/logo_missing.png" />
-                                <i class="icon ion-play icon-accessory"></i>
-                                <h2>{{playlist.get('name')}}</h2>
-                                <p>{{playlist.get('description')}}</p>
-                                <img class="BGImage" ng-src="{{playlist.get('image')}}" ng-if="playlist.get('image')" />
-                            </a>
-                        </div>
-                        <ion-infinite-scroll on-infinite="loadMoreSearch('Playlist', 'playlist')" distance="1%" ng-if="search.playlist.results.length && !search.playlist.maxed"></ion-infinite-scroll>
-                        <p class="empty-list" ng-show="!search.playlist.results.length && search.playlist.loaded">It looks like we don't have any music for this section. Check back later!</p>
                     </ion-content>
                 </ion-nav-view>
             </ion-tab>

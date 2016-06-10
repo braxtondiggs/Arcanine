@@ -1,22 +1,21 @@
 'use strict';
 
-function VenueCtrl($scope, $state, $http, $firebaseArray, $cordovaGeolocation, $cordovaDialogs, $ionicHistory, $ionicScrollDelegate, lodash, Loading, Auth, ENV, User, Utils, Player, currentAuth) {
+function VenueCtrl($scope, $rootScope, $state, $http, $firebaseArray, $cordovaGeolocation, $cordovaDialogs, $ionicHistory, $ionicScrollDelegate, lodash, Loading, Auth, ENV, User, Utils, Player, currentAuth) {
 	var vm = this;
 	vm.auth = Auth;
-	vm.user = {};
 	vm.players = {};
 	vm.loaded = false;
 	vm.manual = false;
 	var geoFire = new GeoFire(new Firebase(ENV.FIREBASE_URL + 'Locations/Player'));
-	vm.user = currentAuth;
+	$rootScope.user = currentAuth;
 
 	$scope.$watch(angular.bind(this, function() {
 		return this.user.location;
 	}), function(location) {
 		if (!lodash.isUndefined(location)) {
 			var obj = {
-				id: vm.user.id,
-				location: vm.user.location
+				id: $rootScope.user.id,
+				location: $rootScope.user.location
 			};
 			User.update(obj);
 			var query = geoFire.query({
@@ -42,7 +41,7 @@ function VenueCtrl($scope, $state, $http, $firebaseArray, $cordovaGeolocation, $
 			timeout: 10000,
 			enableHighAccuracy: false
 		}).then(function(position) {
-			vm.user.location = {
+			$rootScope.user.location = {
 				lat: position.coords.latitude,
 				lng: position.coords.longitude
 			};
@@ -74,7 +73,7 @@ function VenueCtrl($scope, $state, $http, $firebaseArray, $cordovaGeolocation, $
 		}).then(function(response) {
 			if (response.data[0]) {
 				vm.players = [];
-				vm.user.location = { lat: parseFloat(response.data[0].lat), lng: parseFloat(response.data[0].lon) };
+				$rootScope.user.location = { lat: parseFloat(response.data[0].lat), lng: parseFloat(response.data[0].lon) };
 				vm.manual = false;
 				$ionicScrollDelegate.scrollTop(true);
 			}
@@ -83,9 +82,9 @@ function VenueCtrl($scope, $state, $http, $firebaseArray, $cordovaGeolocation, $
 	};
 	vm.join = function(player) {
 		function connect() {
-			Player.getConnected(player.$id).$add(vm.user.id).then(function(ref) {
+			Player.getConnected(player.$id).$add($rootScope.user.id).then(function(ref) {
 				var obj = {
-					id: vm.user.id,
+					id: $rootScope.user.id,
 					connected: {
 						id: ref.key(),
 						player: player.$id
@@ -102,8 +101,8 @@ function VenueCtrl($scope, $state, $http, $firebaseArray, $cordovaGeolocation, $
 		}
 
 		function disconnect(rooms, callback) {
-			if (!lodash.isNull(rooms.$getRecord(vm.user.connected.id))) {
-				var room = rooms.$getRecord(vm.user.connected.id);
+			if (!lodash.isNull(rooms.$getRecord($rootScope.user.connected.id))) {
+				var room = rooms.$getRecord($rootScope.user.connected.id);
 				rooms.$remove(room).then(function() {
 					var obj = {
 						id: vm.user.id,
@@ -122,7 +121,7 @@ function VenueCtrl($scope, $state, $http, $firebaseArray, $cordovaGeolocation, $
 			if (res === 1) {
 				Player.getConnected(player.$id).$loaded().then(function(rooms) {
 					if (vm.user.connected.id) {
-						if (lodash.isNull(rooms.$getRecord(vm.user.connected.id)) || vm.user.connected.id !== rooms.$getRecord(vm.user.connected.id).$id) {
+						if (lodash.isNull(rooms.$getRecord($rootScope.user.connected.id)) || $rootScope.user.connected.id !== rooms.$getRecord($rootScope.user.connected.id).$id) {
 							disconnect(rooms, function() {
 								connect();
 							});

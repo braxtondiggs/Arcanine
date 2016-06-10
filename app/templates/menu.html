@@ -7,25 +7,24 @@
             </ion-nav-buttons>
         </ion-nav-bar>
         <ion-nav-view name="menuContent"></ion-nav-view>
-        <!--<div ng-include="'templates/vote.html'"></div>-->
         <div ng-include="'templates/footer.html'"></div>
     </ion-side-menu-content>
     <ion-side-menu side="left" class="dark-menu" watch-menu>
-        <header class="bar bar-header bar-stable" ng-class="main.user.id ? 'loggedIn' : 'loggedOut'">
-            <a class="profile_settings" nav-clear menu-close href="#/app/settings" ng-if="main.user.id">
+        <header class="bar bar-header bar-stable" ng-class="user.id ? 'loggedIn' : 'loggedOut'">
+            <a class="profile_settings" nav-clear menu-close href="#/app/settings" ng-if="user.id">
                 <i class="icon ion-gear-b" ng-class="{'animated bounceIn': ratio}" ng-show="ratio"></i>
             </a>
-            <a class="profile_container" nav-clear menu-close ng-if="main.user.id" ng-href="#/app/profile/{{main.user.id}}">
+            <a class="profile_container" nav-clear menu-close ng-if="user.id" ng-href="#/app/profile/{{user.id}}">
                 <div class="img-circle" ng-class="{'animated bounceIn': ratio}" ng-show="ratio">
-                    <img alt="" ng-src="{{(main.user.profileImageURL)?main.user.profileImageURL:'images/missingPerson.jpg'}}" err-src="images/missingPerson.jpg" />
+                    <img alt="" ng-src="{{(user.profileImageURL)?user.profileImageURL:'images/missingPerson.jpg'}}" err-src="images/missingPerson.jpg" />
                 </div>
-                <h1 class="title" ng-class="{'animated fadeInLeft': ratio}" ng-show="main.user.id && ratio">{{main.user.displayName}}</h1>
-                <div class="background" ng-style="{'background-image':'url({{(main.user.profileImageURL)?main.user.profileImageURL:'images/missingPerson.jpg'}})'}"></div>
+                <h1 class="title" ng-class="{'animated fadeInLeft': ratio}" ng-show="user.id && ratio">{{user.displayName}}</h1>
+                <div class="background" ng-style="{'background-image':'url({{(user.profileImageURL)?user.profileImageURL:'images/missingPerson.jpg'}})'}"></div>
             </a>
         </header>
         <ion-content class="has-header" scroll="false" ng-style="{'background-image':'url(images/BG.png)'}">
             <ion-list>
-                <ion-item nav-clear menu-close class="animated delay-1" ng-class="(ratio)?'fadeInLeft':'fadeOutLeft'" ng-click="openLogin();" href="" ng-if="!main.user.id" ng-show="ratio">
+                <ion-item nav-clear menu-close class="animated delay-1" ng-class="(ratio)?'fadeInLeft':'fadeOutLeft'" ng-click="openLogin();" href="" ng-if="!user.id" ng-show="ratio">
                     <i class="icon ion-person-stalker animated delay-6" ng-class="(ratio)?'bounceIn':'bounceOut'" ng-show="ratio"></i>Log-in / Sign-up
                 </ion-item>
                 <ion-item nav-clear menu-close class="animated delay-2" ng-class="(ratio)?'fadeInLeft':'fadeOutLeft'" ng-show="ratio" href="#/app/dashboard">
@@ -43,39 +42,10 @@
                 <ion-item nav-clear menu-close class="animated delay-6" ng-class="(ratio)?'fadeInLeft':'fadeOutLeft'" ng-show="ratio" href="#/app/music" ng-if="false">
                     <i class="icon ion-headphone animated delay-11" ng-class="(ratio)?'bounceIn':'bounceOut'" ng-show="ratio"></i>My Music
                 </ion-item>
-                <ion-item nav-clear class="logout" ng-click="main.logout();" ng-if="main.user.id">
+                <ion-item nav-clear class="logout" ng-click="main.logout();" ng-if="user.id">
                     <i class="icon ion-person-stalker animated bounceIn" ng-show="ratio"></i>Logout
                 </ion-item>
             </ion-list>
         </ion-content>
-    </ion-side-menu>
-    <ion-side-menu side="right" class="dark-menu">
-        <header class="bar bar-header bar-stable">
-            <h1 class="title"><i class="ion-music-note"></i>What's Playing</h1>
-        </header>
-        <!--<ion-content class="has-header queue-menu" ng-controller="QueueCtrl">
-            <ion-list class="list queue dark-list" ng-show="queue.length">
-                <div ng-repeat="video in queue">
-                    <ion-item menu-close class="item item-thumbnail-left" href="#/app/artist/slug/{{video.get('IMVDBartistId')}}" on-hold="activateVote(video)" ng-if="video.get('isActive')">
-                        <img ng-src="{{video.get('image')}}" on-hold="activateVote(video)">
-                        <i class="icon ion-chevron-right icon-accessory"></i>
-                        <h2>{{video.get('artistInfo')}}</h2>
-                        <p>{{video.get('trackInfo')}}</p>
-                        <ion-option-button class="button-balanced" ng-click="activateVote(video)"><i class="ion-arrow-graph-up-left icon"></i></ion-option-button>
-                    </ion-item>
-                </div>
-                <div ng-repeat="video in queue | orderBy: '-counter'">
-                    <ion-item menu-close class="item item-thumbnail-left item-remove-animate" href="#/app/artist/slug/{{video.get('IMVDBartistId')}}" on-hold="activateVote(video)" ng-if="!video.get('isActive')">
-                        <img ng-src="{{video.get('image')}}">
-                        <i class="icon ion-chevron-right icon-accessory"></i>
-                        <h2>{{video.get('artistInfo')}}</h2>
-                        <p>{{video.get('trackInfo')}}</p>
-                        <ion-option-button class="button-balanced" ng-click="activateVote(video)"><i class="ion-arrow-graph-up-left icon"></i></ion-option-button>
-                        <ion-option-button class="button-assertive icon ion-trash-a" ng-click="deleteSong($index);$event.stopPropagation();" ng-if="video.get('userId').id === currentUser.id"></ion-option-button>
-                    </ion-item>
-                </div>
-            </ion-list>
-            <p ng-show="!queue.length" class="empty-list">Is it quiet in here? No music is playing. Be the first!</p>
-        </ion-content>-->
     </ion-side-menu>
 </ion-side-menus>

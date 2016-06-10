@@ -1,8 +1,8 @@
 'use strict';
 
-function SettingsCtrl($q, $state, $cordovaDialogs, $cordovaAppVersion, $cordovaEmailComposer, $localStorage, $ionicHistory, Auth, User, Loading, currentAuth) {
+function SettingsCtrl($rootScope, $q, $state, $cordovaDialogs, $cordovaAppVersion, $cordovaEmailComposer, $localStorage, $ionicHistory, Auth, User, Loading, currentAuth) {
 	var vm = this;
-	vm.user = currentAuth;
+	$rootScope.user = currentAuth;
 	vm.submit = function() {
 		function changeEmail() {
 			if (vm.form.email.$dirty) {
@@ -34,8 +34,8 @@ function SettingsCtrl($q, $state, $cordovaDialogs, $cordovaAppVersion, $cordovaE
 
 		function updateUser() {
 			if (vm.form.gender.$dirty) {
-				vm.user.gender = vm.form.gender.$viewValue;
-				User.update(vm.user).then(function(user) {
+				$rootScope.user.gender = vm.form.gender.$viewValue;
+				User.update($rootScope.user).then(function(user) {
 					console.log(user);
 				});
 			}
@@ -57,14 +57,15 @@ function SettingsCtrl($q, $state, $cordovaDialogs, $cordovaAppVersion, $cordovaE
 			if (res === 1) {
 				Loading.show();
 				Auth.$removeUser({
-					email: vm.user.email,
+					email: $rootScope.user.email,
 					password: 'mypassword'
 				}).then(function() {
 					$localStorage.$reset();
 					$state.transitionTo('app.dashboard');
 					$ionicHistory.clearHistory();
 					Loading.hide();
-					delete vm.user;
+					delete $rootScope.user;
+					delete $rootScope.queueList;
 				}).catch(function(error) {
 					console.error('Error: ', error);
 				});

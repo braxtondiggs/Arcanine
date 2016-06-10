@@ -14,18 +14,18 @@
                     <p ng-show="settings.success">- {{settings.successMsg}}</p>
                     <i class="ion ion-close" ng-click="settings.success = false;"></i>
                 </div>
-                <div id="account-settings" ng-if="main.user.provider === 'Password'">
+                <div id="account-settings" ng-if="user.provider === 'Password'">
                     <div class="item item-divider">
                         <span class="animated bounceInLeft">ACCOUNT SETTINGS</span>
                     </div>
                     <div class="item item-input item-floating-label">
                         <span class="input-label">Email</span>
-                        <input type="email" name="email" placeholder="Email" ng-model="main.user.email" ng-minlength="1" ng-required="true" ng-pattern="/^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/">
+                        <input type="email" name="email" placeholder="Email" ng-model="user.email" ng-minlength="1" ng-required="true" ng-pattern="/^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/">
                         <i class="ion ion-close-round animated delay-4" ng-class="settings.form.email.length ? 'fadeIn' : 'fadeOut'" ng-click="settings.form.email = ''" ng-show="settings.form.email.length">&nbsp;</i>
                     </div>
                     <div class="item item-input item-floating-label">
                         <span class="input-label">Nickname</span>
-                        <input type="text" name="name" placeholder="Nickname" ng-model="main.user.displayName" ng-minlength="3" ng-required="true" ng-maxlength="16">
+                        <input type="text" name="name" placeholder="Nickname" ng-model="user.displayName" ng-minlength="3" ng-required="true" ng-maxlength="16">
                         <i class="ion ion-close-round animated delay-4" ng-class="settings.form.name.length ? 'fadeIn' : 'fadeOut'" ng-click="settings.form.name = ''" ng-show="settings.form.name.length">&nbsp;</i>
                     </div>
                     <div class="item item-input item-floating-label">
@@ -78,7 +78,7 @@
             <button class="button button-outline button-dark" ng-click="main.logout()">
                 Log Out
             </button>
-            <button class="button button-outline button-assertive" ng-click="settings.deleteAccount()" ng-if="main.user.provider === 'Password'">
+            <button class="button button-outline button-assertive" ng-click="settings.deleteAccount()" ng-if="user.provider === 'Password'">
                 Delete Account
             </button>
         </div>

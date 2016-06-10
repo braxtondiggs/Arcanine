@@ -201,6 +201,37 @@ h1 {
     }
 }
 
+.vote {
+    padding: 2px 0;
+    .icon {
+        text-align: center;
+        font-size: 20px;
+        &.active:nth-child(1) {
+            color: #2980b9;
+        }
+        &.active:nth-child(3) {
+            color: #c0392b;
+        }
+    }
+    .count-total {
+        font-size: 14px;
+        line-height: initial;
+        text-align: center;
+    }
+}
+.item-vote {
+    a.item-content {
+        padding-left: 130px;
+        > img:first-child {
+            left: 40px;
+        }
+        .vote {
+            position: absolute;
+            left: 10px;
+            top: 3px;
+        }
+    }
+}
 .card {
     box-shadow: 0 1px 10px rgba(204, 96, 85, 0.2);
     background-color: $topBG;
