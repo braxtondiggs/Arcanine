@@ -34,7 +34,10 @@ function QueueService($rootScope, $http, $firebaseArray, $firebaseObject, $cordo
 						method: 'GET',
 						url: ENV.apiEndpoint + 'artists/find/' + track.id,
 					}).success(function(data) {
-						data.user = $rootScope.user.id;
+						data.user = {
+							id: $rootScope.user.id,
+							name: $rootScope.user.displayName
+						};
 						get().$add(data).then(function() {
 							$cordovaDialogs.alert('Your song is now in the queue!', 'Alma');
 							Loading.hide();
@@ -59,11 +62,17 @@ function QueueService($rootScope, $http, $firebaseArray, $firebaseObject, $cordo
 
 	function vote(trackId, status) {
 		refTrack(trackId).once('value', function(snapshot) {
-			if (status !== snapshot.child('votes/' + $rootScope.user.id).val()) {
+			if (status !== snapshot.child('votes/' + $rootScope.user.id + '/status').val()) {
 				var incr = (Boolean(status)) ? 1 : -1;
-				var prior = parseInt(snapshot.getPriority(), 10);
+				var prior = parseInt(snapshot.getPriority(), 10) || 0;
 				prior += incr;
-				snapshot.child('votes/' + $rootScope.user.id).ref().set(status);
+				snapshot.child('votes/' + $rootScope.user.id).ref().set({
+					user: {
+						name: $rootScope.user.displayName,
+						image: $rootScope.user.profileImageURL
+					},
+					status: status
+				});
 				snapshot.ref().setPriority(prior);
 			}
 		});

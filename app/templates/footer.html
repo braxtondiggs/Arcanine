@@ -1,8 +1,8 @@
 <ion-footer-bar align-title="left" class="footer-bar animated" ng-class="queueList.length > 0? 'bounceInUp':'bounceOutDown'" ng-show="queueList.length > 0" ng-controller="QueueCtrl as queue">
     <div class="row" ng-click="queue.open()" ng-repeat="track in queueList | orderBy:'-$priority'|limitTo:1">
         <div class="col-10 col vote">
-            <div class="icon ion-arrow-up-a" ng-click="queue.vote(track, true);$event.stopPropagation();" ng-class="{'active': track.votes[user.id]}"></div>
-            <div class="icon ion-arrow-down-a" ng-click="queue.vote(track, false);$event.stopPropagation();" ng-class="{'active': queue.status(track.votes[user.id])}"></div>
+            <div class="icon ion-arrow-up-a" ng-click="queue.vote(track, true);$event.stopPropagation();" ng-class="{'active': track.votes[user.id].status}"></div>
+            <div class="icon ion-arrow-down-a" ng-click="queue.vote(track, false);$event.stopPropagation();" ng-class="{'active': queue.status(track.votes[user.id].status)}"></div>
         </div>
         <div class="col-20 col" >
             <img ng-src="{{track.image.o}}" src="images/logo_missing.png" />

@@ -17,14 +17,11 @@ function PlayerService($rootScope, $firebaseObject, $q, $state, $firebaseArray, 
 				});
 			});
 		},
-		refConnected: function() {
-			return this.ref().child('connected');
+		refConnected: function(id) {
+			return this.ref(id).child('connected');
 		},
-		getConnected: function() {
-			return $firebaseArray(this.refConnected());
-		},
-		getConnected2: function() {
-			return $firebaseArray(this.refConnected().child($rootScope.user.id));
+		getConnected: function(id) {
+			return $firebaseArray(this.refConnected(id));
 		},
 		auth: function() {
 			var deferred = $q.defer(),

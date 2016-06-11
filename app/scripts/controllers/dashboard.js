@@ -1,6 +1,6 @@
 'use strict';
 
-function DashboardCtrl($scope, $rootScope, $state, $timeout, $ionicActionSheet, $ionicScrollDelegate, Chat, Player, Loading) {
+function DashboardCtrl($scope, $rootScope, $state, $timeout, $ionicActionSheet, $ionicScrollDelegate, $cordovaKeyboard, Chat, Player, Loading) {
 	var vm = this;
 	vm.loaded = false;
 	if ($rootScope.user && $rootScope.user.connected) {
@@ -28,6 +28,7 @@ function DashboardCtrl($scope, $rootScope, $state, $timeout, $ionicActionSheet, 
 					}
 				}).then(function() {
 					Loading.hide();
+					$ionicScrollDelegate.scrollBottom(true);
 					vm.message = '';
 				});
 			});
@@ -59,6 +60,16 @@ function DashboardCtrl($scope, $rootScope, $state, $timeout, $ionicActionSheet, 
 				return true;
 			}
 		});
+	};
+	vm.getKeys = function($event) {
+		if ($event.which === 13) {
+			if (window.cordova && window.cordova.plugins.Keyboard) {
+				if ($cordovaKeyboard.isVisible()) {
+					$cordovaKeyboard.close();
+				}
+			}
+			vm.submit();
+		}
 	};
 	$scope.$on('$ionicView.enter', function() {
 		$ionicScrollDelegate.scrollBottom(true);

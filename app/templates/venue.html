@@ -8,7 +8,7 @@
                 <p>{{player.location.display_name}}</p>
             </div>
             <div class="item item-image animated fadeIn" ng-if="player.nowPlaying">
-                <img ng-src="{{value.nowPlaying}}" err-src="images/logo_missing.png">
+                <img ng-src="{{player.nowPlaying.image.o}}" src="images/logo_missing.png">
             </div>
             <a class="item item-icon-left assertive animated fadeIn" ng-if="player.active">
                 <i class="icon ion-music-note"></i> Join The Party
