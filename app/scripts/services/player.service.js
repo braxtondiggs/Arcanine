@@ -3,11 +3,11 @@
 function PlayerService($rootScope, $firebaseObject, $q, $state, $firebaseArray, $cordovaDialogs, ENV, User) {
 	return {
 		ref: function(id) {
-			var _id = id || $rootScope.user.connected.player;
+			var _id = id || $rootScope.user.connected;
 			return new Firebase(ENV.FIREBASE_URL + 'Player/' + _id);
 		},
 		get: function(id) {
-			var _id = id || $rootScope.user.connected.player;
+			var _id = id || $rootScope.user.connected;
 			return $firebaseObject(this.ref(_id));
 		},
 		update: function(obj) {

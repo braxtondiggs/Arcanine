@@ -38,6 +38,7 @@ function QueueService($rootScope, $http, $firebaseArray, $firebaseObject, $cordo
 							id: $rootScope.user.id,
 							name: $rootScope.user.displayName
 						};
+						data.priority = 0;
 						get().$add(data).then(function() {
 							$cordovaDialogs.alert('Your song is now in the queue!', 'Alma');
 							Loading.hide();
@@ -73,7 +74,7 @@ function QueueService($rootScope, $http, $firebaseArray, $firebaseObject, $cordo
 					},
 					status: status
 				});
-				snapshot.ref().setPriority(prior);
+				snapshot.child('priority').ref().set(prior);
 			}
 		});
 	}

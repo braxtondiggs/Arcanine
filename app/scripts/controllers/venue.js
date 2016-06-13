@@ -88,13 +88,13 @@ function VenueCtrl($scope, $rootScope, $state, $http, $firebaseArray, $cordovaGe
 	};
 	vm.join = function(player) {
 		function connect() {
-			Player.getConnected(player.$id).$add($rootScope.user.id).then(function(ref) {
+			Player.ref(player.$id).child('connected/' + $rootScope.user.id).set({
+				name: $rootScope.user.displayName,
+				image: $rootScope.user.profileImageURL
+			}).then(function() {
 				var obj = {
 					id: $rootScope.user.id,
-					connected: {
-						id: ref.key(),
-						player: player.$id
-					}
+					connected: player.$id
 				};
 				User.update(obj);
 				$cordovaDialogs.alert('You have succesfully connect to this player', 'Alma').then(function() {
@@ -107,8 +107,8 @@ function VenueCtrl($scope, $rootScope, $state, $http, $firebaseArray, $cordovaGe
 		}
 
 		function disconnect(rooms, callback) {
-			if (!lodash.isNull(rooms.$getRecord($rootScope.user.connected.id))) {
-				var room = rooms.$getRecord($rootScope.user.connected.id);
+			if (!lodash.isNull(rooms.$getRecord($rootScope.user.id))) {
+				var room = rooms.$getRecord($rootScope.user.id);
 				rooms.$remove(room).then(function() {
 					var obj = {
 						id: $rootScope.user.id,
@@ -126,8 +126,8 @@ function VenueCtrl($scope, $rootScope, $state, $http, $firebaseArray, $cordovaGe
 		$cordovaDialogs.confirm('Are you sure you want to connect to this player?', 'Alma', ['Connect', 'Cancel']).then(function(res) {
 			if (res === 1) {
 				Player.getConnected(player.$id).$loaded().then(function(rooms) {
-					if ($rootScope.user.connected && $rootScope.user.connected.id) {
-						if (lodash.isNull(rooms.$getRecord($rootScope.user.connected.id)) || $rootScope.user.connected.id !== rooms.$getRecord($rootScope.user.connected.id).$id) {
+					if ($rootScope.user.connected) {
+						if (lodash.isNull(rooms.$getRecord($rootScope.user.id)) || $rootScope.user.id !== rooms.$getRecord($rootScope.user.id).$id) {
 							disconnect(rooms, function() {
 								connect();
 							});

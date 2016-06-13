@@ -25,15 +25,12 @@ function AppCtrl($scope, $rootScope, $state, $ionicModal, $ionicSlideBoxDelegate
 		}
 	});
 	function userRoomConfig() {
-		if ($rootScope.user.connected && $rootScope.user.connected.id) {
-			Player.ref().child('connected/' + $rootScope.user.connected.id).set({
-				id: $rootScope.user.id,
-				user: {
-					name: $rootScope.user.displayName,
-					image: $rootScope.user.profileImageURL
-				}
+		if ($rootScope.user && $rootScope.user.connected) {
+			Player.ref().child('connected/' + $rootScope.user.id).set({
+				name: $rootScope.user.displayName,
+				image: $rootScope.user.profileImageURL
 			});
-			Player.ref().child('connected/' + $rootScope.user.connected.id).onDisconnect().remove();
+			Player.ref().child('connected/' + $rootScope.user.id).onDisconnect().remove();
 		}
 	}
 	userRoomConfig();
