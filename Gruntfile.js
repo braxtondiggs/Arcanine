@@ -44,7 +44,7 @@ module.exports = function (grunt) {
           ENV: {
             name: 'development',
             apiEndpoint: 'http://localhost:9000/api/',
-            FIREBASE_URL: 'https://arbok.firebaseio.com/'
+            FIREBASE_URL: 'https://arbokold.firebaseio.com/'
           }
         }
       },
@@ -53,7 +53,7 @@ module.exports = function (grunt) {
           ENV: {
             name: 'production',
             apiEndpoint: 'http://arbok.herokuapp.com/api/',
-            FIREBASE_URL: 'https://arbok.firebaseio.com/'
+            FIREBASE_URL: 'https://arbokold.firebaseio.com/'
           }
         }
       }
