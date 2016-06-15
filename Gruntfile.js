@@ -52,7 +52,7 @@ module.exports = function (grunt) {
         constants: {
           ENV: {
             name: 'production',
-            apiEndpoint: 'http://arbok.herokuapp.com/api/',
+            apiEndpoint: 'https://arbok.herokuapp.com/api/',
             FIREBASE_URL: 'https://arbokold.firebaseio.com/'
           }
         }
