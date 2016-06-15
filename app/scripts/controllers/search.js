@@ -95,7 +95,7 @@ function SearchCtrl($scope, $http, $localStorage, $timeout, lodash, $cordovaKeyb
 	vm.onChange = function(action) {
 		vm.action = action;
 		if (vm.changed) {
-			search(getPage());
+			search(1);
 			vm.changed = false;
 		}
 	};
@@ -108,8 +108,15 @@ function SearchCtrl($scope, $http, $localStorage, $timeout, lodash, $cordovaKeyb
 	vm.convertSlug = function(name, slug) {
 		return Utils.convertSlug(name, slug);
 	};
+	vm.clear = function() {
+		vm.term = '';
+		vm.videos = {};
+		vm.entities = {};
+		angular.element(document.querySelector('#search'))[0].focus();
+	};
 	vm.getKeys = function($event) {
 		if ($event.which === 13) {
+			$event.target.blur();
 			if (window.cordova && window.cordova.plugins.Keyboard) {
 				if ($cordovaKeyboard.isVisible()) {
 					$cordovaKeyboard.close();

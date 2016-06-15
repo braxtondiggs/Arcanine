@@ -1,9 +1,9 @@
 'use strict';
 
-function PlayerService($rootScope, $firebaseObject, $q, $state, $firebaseArray, $cordovaDialogs, ENV, User) {
+function PlayerService($rootScope, $firebaseObject, $q, $state, $firebaseArray, $ionicPopup, ENV, User) {
 	return {
 		ref: function(id) {
-			var _id = id || $rootScope.user.connected;
+			var _id = id || (($rootScope.user && $rootScope.user.connected)?$rootScope.user.connected:null);
 			return new Firebase(ENV.FIREBASE_URL + 'Player/' + _id);
 		},
 		get: function(id) {
@@ -29,7 +29,10 @@ function PlayerService($rootScope, $firebaseObject, $q, $state, $firebaseArray, 
 			if (user.connected) {
 				deferred.resolve();
 			} else {
-				$cordovaDialogs.alert('You have not connected to an Alma yet.', 'Alma - Error').then(function() {
+				$ionicPopup.alert({
+					template: 'You have not connected to an Alma yet.',
+					title: 'Alma - Error'
+				}).then(function() {
 					$state.transitionTo('app.venue');
 					deferred.reject();
 				});

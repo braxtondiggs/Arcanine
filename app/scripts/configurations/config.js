@@ -67,10 +67,11 @@ function appRoute($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 					controller: 'ArtistCtrl',
 					controllerAs: 'artist',
 					resolve: {
-						'Artist': ['$q', '$stateParams', 'ArtistService', '$cordovaDialogs', '$ionicHistory', function($q, $stateParams, ArtistService, $cordovaDialogs, $ionicHistory) {
+						'Artist': ['$q', '$stateParams', 'ArtistService', '$ionicPopup', function($q, $stateParams, ArtistService, $ionicPopup) {
 							function notFound() {
-								$cordovaDialogs.alert('We are having trouble getting this artists information right now. Our data is constantly changing, so check back later', 'Alma - Error').then(function() {
-									$ionicHistory.goBack(-1);
+								$ionicPopup.alert({
+									template: 'We are having trouble getting this artists information right now. Our data is constantly changing, so check back later',
+									title: 'Alma - Error'
 								});
 							}
 							var deferred = $q.defer();

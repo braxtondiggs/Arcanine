@@ -33,7 +33,7 @@
         <i class="icon ion-ios-camera-outline chat-image" ng-click="dashboard.attachImage()" ng-if="!dashboard.image"></i>
         <img ng-src="{{dashboard.image}}" ng-if="dashboard.image && false" class="dashbord-image" ng-click="dashboard.changeImage()" />
         <form name="dashboard.chatForm" ng-submit="dashboard.submit()" novalidate style="width: 100%;">
-            <input type="text" id="chat-input" name="message" placeholder="Tap to write message..." ng-model="dashboard.message" ng-keyup="dashboard.getKeys($event)" required/>
+            <input type="text" id="chat-input" name="message" placeholder="Tap to write message..." ng-model="dashboard.message" ng-keyup="dashboard.getKeys($event)" autocomplete="off" required/>
             <button type="submit" class="button button-small button-outline dark-button" ng-disabled="dashboard.chatForm.message.$invalid">Send</button>
         </form>
     </ion-subfooter-bar>

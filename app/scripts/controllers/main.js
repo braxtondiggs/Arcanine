@@ -1,6 +1,6 @@
 'use strict';
 
-function AppCtrl($scope, $rootScope, $state, $ionicModal, $ionicSlideBoxDelegate, $cordovaKeyboard, $cordovaDialogs, $ionicSideMenuDelegate, $ionicHistory, $localStorage, Auth, User, Player, currentAuth, lodash) {
+function AppCtrl($scope, $rootScope, $state, $ionicModal, $ionicSlideBoxDelegate, $cordovaKeyboard, $ionicPopup, $ionicSideMenuDelegate, $ionicHistory, $localStorage, Auth, User, Player, currentAuth, lodash) {
 	var vm = this;
 	$ionicModal.fromTemplateUrl('templates/modal/login.tmpl.html', {
 		scope: $scope,
@@ -60,8 +60,11 @@ function AppCtrl($scope, $rootScope, $state, $ionicModal, $ionicSlideBoxDelegate
 	};
 
 	vm.logout = function() {
-		$cordovaDialogs.confirm('Are you sure you want to logout?', 'Alma').then(function(res) {
-			if (res === 1) {
+		$ionicPopup.confirm(
+			{template: 'Are you sure you want to logout?',
+			title: 'Alma'
+		}).then(function(res) {
+			if (res) {
 				if ($ionicSideMenuDelegate.isOpenLeft() === true) {
 					$ionicSideMenuDelegate.toggleLeft();
 				}
@@ -77,7 +80,10 @@ function AppCtrl($scope, $rootScope, $state, $ionicModal, $ionicSlideBoxDelegate
 				$ionicHistory.nextViewOptions({
 					historyRoot: true
 				});
-				$cordovaDialogs.alert('You have been successfully logged out', 'Alma');
+				$ionicPopup.alert({
+					template: 'You have been successfully logged out',
+					title: 'Alma'
+				});
 			}
 		});
 	};

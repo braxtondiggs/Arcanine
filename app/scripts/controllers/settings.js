@@ -1,6 +1,6 @@
 'use strict';
 
-function SettingsCtrl($rootScope, $q, $state, $cordovaDialogs, $cordovaAppVersion, $cordovaEmailComposer, $localStorage, $ionicHistory, Auth, User, Loading, currentAuth) {
+function SettingsCtrl($rootScope, $q, $state, $ionicPopup, $cordovaAppVersion, $cordovaEmailComposer, $localStorage, $ionicHistory, Auth, User, Loading, currentAuth) {
 	var vm = this;
 	$rootScope.user = currentAuth;
 	vm.submit = function() {
@@ -53,8 +53,13 @@ function SettingsCtrl($rootScope, $q, $state, $cordovaDialogs, $cordovaAppVersio
 		}
 	};
 	vm.deleteAccount = function() {
-		$cordovaDialogs.confirm('Deleting your account will also remove all of your library data. This is permanent and cannout be undone. Are your sure?', 'Delete Your Account', ['Yes', 'Cancel']).then(function(res) {
-			if (res === 1) {
+		$ionicPopup.confirm({
+			template: 'Deleting your account will also remove all of your library data. This is permanent and cannout be undone. Are your sure?',
+			title: 'Delete Your Account',
+			cancelText: 'Cancel',
+			okText: 'Yes'
+		}).then(function(res) {
+			if (res) {
 				Loading.show();
 				Auth.$removeUser({
 					email: $rootScope.user.email,

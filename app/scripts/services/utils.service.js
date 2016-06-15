@@ -2,7 +2,7 @@
 
 function UtilsService() {
 	function checkImage(img) {
-		return (img.slice(-3) === 'jpg') ? ((img.indexOf('http://imvdb.com/') > -1) ? img.substr(17) : img) : 'images/logo_missing.png';
+		return (img.slice(-3) === 'jpg') ? ((img.indexOf('https://imvdb.com/') > -1) ? img.substr(18) : img) : 'images/logo_missing.png';
 	}
 
 	function convertSlug(name, slug) {

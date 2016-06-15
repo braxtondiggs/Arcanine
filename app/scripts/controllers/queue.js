@@ -1,6 +1,6 @@
 'use strict';
 
-function QueueCtrl($scope, $rootScope, $state, $ionicModal, $cordovaKeyboard, $cordovaDialogs, lodash, Queue) {
+function QueueCtrl($scope, $rootScope, $state, $ionicModal, $cordovaKeyboard, $ionicPopup, lodash, Queue) {
 	var vm = this;
 	$rootScope.votes = {};
 	$rootScope.$watch('user.connected', function(conn) {
@@ -38,10 +38,18 @@ function QueueCtrl($scope, $rootScope, $state, $ionicModal, $cordovaKeyboard, $c
 	};
 
 	vm.remove = function(track) {
-		$cordovaDialogs.confirm('Are you sure you want to delete this video from the queue?', 'Alma', ['Delete', 'Cancel']).then(function(res) {
-			if (res === 1) {
+		$ionicPopup.confirm({
+			template: 'Are you sure you want to delete this video from the queue?',
+			title: 'Alma',
+			cancelText: 'Cancel',
+			okText: 'Delete'
+		}).then(function(res) {
+			if (res) {
 				Queue.remove(track).then(function() {
-					$cordovaDialogs.alert('Your video has successfully been removed from the queue', 'Alma');
+					$ionicPopup.alert({
+						template: 'Your video has successfully been removed from the queue',
+						title: 'Alma'
+					});
 				});
 			}
 		});

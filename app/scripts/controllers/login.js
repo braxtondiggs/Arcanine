@@ -1,6 +1,6 @@
 'use strict';
 
-function LoginCtrl($rootScope, $cordovaDialogs, Auth, User, Loading) {
+function LoginCtrl($rootScope, $ionicPopup, Auth, User, Loading) {
 	var vm = this;
 	vm.auth = Auth;
 
@@ -106,9 +106,15 @@ function LoginCtrl($rootScope, $cordovaDialogs, Auth, User, Loading) {
 			Auth.$resetPassword({
 				email: vm.login.form.lemail.$viewValue
 			}).then(function() {
-				$cordovaDialogs.alert('Password reset email sent successfully!', 'Alma', 'Ok');
+				$ionicPopup.alert({
+					template: 'Password reset email sent successfully!',
+					title: 'Alma'
+				});
 			}).catch(function(error) {
-				$cordovaDialogs.alert(error, 'Alma', 'Ok');
+				$ionicPopup.alert({
+					template: error,
+					title: 'Alma'
+				});
 			});
 		}
 	};

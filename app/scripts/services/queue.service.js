@@ -1,6 +1,6 @@
 'use strict';
 
-function QueueService($rootScope, $http, $firebaseArray, $firebaseObject, $cordovaDialogs, lodash, Loading, Player, ENV) {
+function QueueService($rootScope, $http, $firebaseArray, $firebaseObject, $ionicPopup, lodash, Loading, Player, ENV) {
 	function ref() {
 		return Player.ref().child('queue');
 	}
@@ -27,26 +27,44 @@ function QueueService($rootScope, $http, $firebaseArray, $firebaseObject, $cordo
 
 	function add(track) {
 		Player.auth().then(function() {
-			$cordovaDialogs.confirm('Are you sure you want add this song?', 'Alma').then(function(res) {
-				if (res === 1) {
+			$ionicPopup.confirm({
+				title: 'Alma',
+				template: 'Are you sure you want add this song?'
+			}).then(function(res) {
+				if (res) {
 					if (check(track)) {
 						Loading.show();
 						$http({
 							method: 'GET',
 							url: ENV.apiEndpoint + 'artists/find/' + track.id,
 						}).success(function(data) {
-							data.user = {
-								id: $rootScope.user.id,
-								name: $rootScope.user.displayName
-							};
-							data.priority = 0;
-							get().$add(data).then(function() {
-								$cordovaDialogs.alert('Your song is now in the queue!', 'Alma');
+							var src = lodash.filter(data.sources, ['source', 'youtube']);
+							if (src.length > 0) {
+								data.user = {
+									id: $rootScope.user.id,
+									name: $rootScope.user.displayName
+								};
+								data.priority = 0;
+								get().$add(data).then(function() {
+									$ionicPopup.alert({
+										template: 'Your song is now in the queue!',
+										title: 'Alma'
+									});
+									Loading.hide();
+								});
+							}else {
 								Loading.hide();
-							});
+								$ionicPopup.alert({
+									template: 'This song could not be added at this time, try again.',
+									title: 'Alma - Internal Error'
+								});
+							}
 						});
 					} else {
-						$cordovaDialogs.alert('Looks like this song is already in the Queue.', 'Alma - Error');
+						$ionicPopup.alert({
+							template: 'Looks like this song is already in the Queue.',
+							title: 'Alma - Error'
+						});
 					}
 				}
 			});

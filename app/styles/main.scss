@@ -87,10 +87,12 @@ h1 {
 
 .popup-container {
     .popup {
-        background-color: $topBG;
+        background-color: rgba(64, 62, 69, 0.9);
+        border-radius: 5px;
         .popup-head {
-            border-bottom-color: $topBorder;
+            border-bottom-color: rgba(32, 34, 39, 0.3);
             border-bottom-width: 2px;
+            padding: 10px;
             .popup-title {
                 color: $coloredLinks;
                 font-size: 20px;
@@ -102,8 +104,8 @@ h1 {
         .popup-body {
             font-family: 'helvetica_neue_lt_pro45_light';
             padding: 10px 20px;
-            font-size: 12px;
-            margin: 20px 0;
+            font-size: 14px;
+            margin: 10px 0;
             .input {
                 padding: 0;
                 .input__field {

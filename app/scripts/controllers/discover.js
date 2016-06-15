@@ -1,6 +1,6 @@
 'use strict';
 
-function DiscoverCtrl(lodash, $http, $firebaseObject, $cordovaDialogs, ENV, Loading, Queue) {
+function DiscoverCtrl(lodash, $http, $firebaseObject, ENV, Loading, Queue) {
 	var vm = this;
 	vm.get = function(sort) {
 		if (lodash.isUndefined(vm[sort])) {

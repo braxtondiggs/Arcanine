@@ -2,8 +2,8 @@
     <ion-nav-title>
         <form id="header-search" name="searchForm">
             <i class="ion-search"></i>
-            <input class="search_input" name="search" id="search" type="text" placeholder="Search" ng-model="search.term" ng-model-options="{debounce: 250}" ng-keyup="search.getKeys($event)">
-            <a class="ion-close clear-search" ng-show="search.term.length > 2" ng-click="search.term = ''"></a>
+            <input class="search_input" name="search" id="search" type="text" placeholder="Search" ng-model="search.term" ng-model-options="{debounce: 250}" ng-keyup="search.getKeys($event)" autocomplete="off">
+            <a class="ion-close clear-search" ng-show="search.term.length > 2" ng-click="search.clear();"></a>
         </form>
     </ion-nav-title>
     <ion-content scroll="false" ng-class="{'has-footer': queueList.length}">

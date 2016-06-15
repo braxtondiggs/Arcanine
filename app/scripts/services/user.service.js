@@ -1,9 +1,9 @@
 'use strict';
 
-function UserService($rootScope, $q, $state, $firebaseObject, $cordovaDialogs, ENV) {
+function UserService($rootScope, $q, $state, $firebaseObject, $ionicPopup, ENV) {
 	return {
 		ref: function(id) {
-			var _id = id || ($rootScope.user && $rootScope.user.connected);
+			var _id = id || (($rootScope.user && $rootScope.user.connected)?$rootScope.user.connected:null);
 			return new Firebase(ENV.FIREBASE_URL + 'Users/' + _id);
 		},
 		get: function(id) {
@@ -19,7 +19,10 @@ function UserService($rootScope, $q, $state, $firebaseObject, $cordovaDialogs, E
 			if (user) {
 				deferred.resolve();
 			} else {
-				$cordovaDialogs.alert('You need to be logged in inorder to complete this action', 'Alma - Error').then(function() {
+				$ionicPopup.alert({
+					template: 'You need to be logged in inorder to complete this action',
+					title: 'Alma - Error'
+				}).then(function() {
 					$rootScope.openLogin();
 					deferred.reject();
 				});

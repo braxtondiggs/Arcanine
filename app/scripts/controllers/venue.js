@@ -1,6 +1,6 @@
 'use strict';
 
-function VenueCtrl($scope, $rootScope, $state, $http, $firebaseArray, $cordovaGeolocation, $geolocation, $cordovaDialogs, $ionicHistory, $ionicScrollDelegate, lodash, Loading, Auth, ENV, User, Utils, Player, currentAuth) {
+function VenueCtrl($scope, $rootScope, $state, $http, $firebaseArray, $geolocation, $ionicPopup, $ionicHistory, $ionicScrollDelegate, lodash, Loading, Auth, ENV, User, Utils, Player) {
 	var vm = this;
 	vm.auth = Auth;
 	vm.players = {};
@@ -8,7 +8,6 @@ function VenueCtrl($scope, $rootScope, $state, $http, $firebaseArray, $cordovaGe
 	vm.manual = false;
 	vm.location = {};
 	var geoFire = new GeoFire(new Firebase(ENV.FIREBASE_URL + 'Locations/Player'));
-	$rootScope.user = currentAuth;
 
 	$scope.$watch(angular.bind(this, function() {
 		return this.location;
@@ -58,7 +57,6 @@ function VenueCtrl($scope, $rootScope, $state, $http, $firebaseArray, $cordovaGe
 		$geolocation.getCurrentPosition({
 			timeout: 10000
 		}).then(function(position) {
-			console.log(position);
 			vm.location = {
 				lat: position.coords.latitude,
 				lng: position.coords.longitude
@@ -106,7 +104,10 @@ function VenueCtrl($scope, $rootScope, $state, $http, $firebaseArray, $cordovaGe
 					connected: player.$id
 				};
 				User.update(obj);
-				$cordovaDialogs.alert('You have succesfully connect to this player', 'Alma').then(function() {
+				$ionicPopup.alert({
+					template: 'You have succesfully connect to this player',
+					title: 'Alma'
+				}).then(function() {
 					$state.transitionTo('app.dashboard');
 					$ionicHistory.nextViewOptions({
 						historyRoot: true
@@ -132,8 +133,13 @@ function VenueCtrl($scope, $rootScope, $state, $http, $firebaseArray, $cordovaGe
 				callback();
 			}
 		}
-		$cordovaDialogs.confirm('Are you sure you want to connect to this player?', 'Alma', ['Connect', 'Cancel']).then(function(res) {
-			if (res === 1) {
+		$ionicPopup.confirm({
+			template: 'Are you sure you want to connect to this player?',
+			title: 'Alma',
+			okText: 'Connect',
+			cancelText: 'Cancel'
+		}).then(function(res) {
+			if (res) {
 				Player.getConnected(player.$id).$loaded().then(function(rooms) {
 					if ($rootScope.user.connected) {
 						if (lodash.isNull(rooms.$getRecord($rootScope.user.id)) || $rootScope.user.id !== rooms.$getRecord($rootScope.user.id).$id) {

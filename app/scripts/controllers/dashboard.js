@@ -63,12 +63,12 @@ function DashboardCtrl($scope, $rootScope, $state, $timeout, $ionicActionSheet, 
 	};
 	vm.getKeys = function($event) {
 		if ($event.which === 13) {
+			$event.target.blur();
 			if (window.cordova && window.cordova.plugins.Keyboard) {
 				if ($cordovaKeyboard.isVisible()) {
 					$cordovaKeyboard.close();
 				}
 			}
-			vm.submit();
 		}
 	};
 	$scope.$on('$ionicView.enter', function() {
