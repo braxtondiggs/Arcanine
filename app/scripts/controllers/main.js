@@ -17,9 +17,6 @@ function AppCtrl($scope, $rootScope, $state, $ionicModal, $ionicSlideBoxDelegate
 			var id = (authData.provider !== 'password') ? authData[authData.provider].id : authData.uid;
 			User.get(id).$loaded().then(function(user) {
 				$rootScope.user = user;
-				if (user.provider !== 'password') {
-					$rootScope.user = user[user.provider];
-				}
 				userRoomConfig();
 			});
 		}

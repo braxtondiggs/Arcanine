@@ -3,7 +3,7 @@
 function UserService($rootScope, $q, $state, $firebaseObject, $cordovaDialogs, ENV) {
 	return {
 		ref: function(id) {
-			var _id = id || $rootScope.user.connected.player;
+			var _id = id || ($rootScope.user && $rootScope.user.connected);
 			return new Firebase(ENV.FIREBASE_URL + 'Users/' + _id);
 		},
 		get: function(id) {

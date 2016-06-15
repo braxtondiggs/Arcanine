@@ -57,7 +57,6 @@ function SearchCtrl($scope, $http, $localStorage, $timeout, lodash, $cordovaKeyb
 				};
 				if ($ionicTabsDelegate.selectedIndex() === 1) {
 					vm[vm.action].resultsTop = lodash.filter(data.results, function(item) {
-						console.log(vm.convertSlug(item.name, item.slug));
 						return vm.convertSlug(item.name, item.slug).toString().toLowerCase().indexOf(vm.term.toLowerCase()) > -1;
 					});
 					vm[vm.action].results = lodash.filter(data.results, function(item) {

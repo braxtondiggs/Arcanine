@@ -26,28 +26,30 @@ function QueueService($rootScope, $http, $firebaseArray, $firebaseObject, $cordo
 	}
 
 	function add(track) {
-		$cordovaDialogs.confirm('Are you sure you want add this song?', 'Alma').then(function(res) {
-			if (res === 1) {
-				if (check(track)) {
-					Loading.show();
-					$http({
-						method: 'GET',
-						url: ENV.apiEndpoint + 'artists/find/' + track.id,
-					}).success(function(data) {
-						data.user = {
-							id: $rootScope.user.id,
-							name: $rootScope.user.displayName
-						};
-						data.priority = 0;
-						get().$add(data).then(function() {
-							$cordovaDialogs.alert('Your song is now in the queue!', 'Alma');
-							Loading.hide();
+		Player.auth().then(function() {
+			$cordovaDialogs.confirm('Are you sure you want add this song?', 'Alma').then(function(res) {
+				if (res === 1) {
+					if (check(track)) {
+						Loading.show();
+						$http({
+							method: 'GET',
+							url: ENV.apiEndpoint + 'artists/find/' + track.id,
+						}).success(function(data) {
+							data.user = {
+								id: $rootScope.user.id,
+								name: $rootScope.user.displayName
+							};
+							data.priority = 0;
+							get().$add(data).then(function() {
+								$cordovaDialogs.alert('Your song is now in the queue!', 'Alma');
+								Loading.hide();
+							});
 						});
-					});
-				} else {
-					$cordovaDialogs.alert('Looks like this song is already in the Queue.', 'Alma - Error');
+					} else {
+						$cordovaDialogs.alert('Looks like this song is already in the Queue.', 'Alma - Error');
+					}
 				}
-			}
+			});
 		});
 	}
 

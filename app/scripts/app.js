@@ -13,5 +13,6 @@ angular.module('arcanine', [
   'ngTextTruncate',
   'monospaced.elastic',
   '720kb.fx',
-  'firebase'
+  'firebase',
+  'ngGeolocation'
 ]);

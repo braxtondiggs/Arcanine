@@ -17,9 +17,6 @@ function appRoute($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
 							var id = (authData.provider !== 'password') ? authData[authData.provider].id : authData.uid;
 							User.get(id).$loaded().then(function(user) {
 								$rootScope.user = user;
-								if (user.provider !== 'password') {
-									$rootScope.user = user[user.provider];
-								}
 								Loading.hide();
 								deferred.resolve(user);
 							});

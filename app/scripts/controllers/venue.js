@@ -1,6 +1,6 @@
 'use strict';
 
-function VenueCtrl($scope, $rootScope, $state, $http, $firebaseArray, $cordovaGeolocation, $cordovaDialogs, $ionicHistory, $ionicScrollDelegate, lodash, Loading, Auth, ENV, User, Utils, Player, currentAuth) {
+function VenueCtrl($scope, $rootScope, $state, $http, $firebaseArray, $cordovaGeolocation, $geolocation, $cordovaDialogs, $ionicHistory, $ionicScrollDelegate, lodash, Loading, Auth, ENV, User, Utils, Player, currentAuth) {
 	var vm = this;
 	vm.auth = Auth;
 	vm.players = {};
@@ -42,7 +42,7 @@ function VenueCtrl($scope, $rootScope, $state, $http, $firebaseArray, $cordovaGe
 
 	vm.getLocation = function() {
 		Loading.show();
-		$cordovaGeolocation.getCurrentPosition({
+		/*$cordovaGeolocation.getCurrentPosition({
 			timeout: 10000,
 			enableHighAccuracy: false
 		}).then(function(position) {
@@ -54,6 +54,15 @@ function VenueCtrl($scope, $rootScope, $state, $http, $firebaseArray, $cordovaGe
 			$scope.$broadcast('scroll.refreshComplete');
 			Loading.hide();
 			vm.loaded = true;
+		});*/
+		$geolocation.getCurrentPosition({
+			timeout: 10000
+		}).then(function(position) {
+			console.log(position);
+			vm.location = {
+				lat: position.coords.latitude,
+				lng: position.coords.longitude
+			};
 		});
 	};
 	vm.unitConvert = function(unit, m) {

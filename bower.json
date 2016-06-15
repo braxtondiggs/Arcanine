@@ -13,7 +13,8 @@
     "ng-lodash": "^0.5.0",
     "angular-fx": "^1.1.0",
     "angularfire": "^1.2.0",
-    "geofire": "^4.1.1"
+    "geofire": "^4.1.1",
+    "ngGeolocation": "^0.0.8"
   },
   "devDependencies": {
     "angular-mocks": "~1.5.3",
