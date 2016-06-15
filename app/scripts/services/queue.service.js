@@ -67,7 +67,7 @@ function QueueService($rootScope, $http, $firebaseArray, $firebaseObject, $cordo
 		refTrack(trackId).once('value', function(snapshot) {
 			if (status !== snapshot.child('votes/' + $rootScope.user.id + '/status').val()) {
 				var incr = (Boolean(status)) ? 1 : -1;
-				var prior = parseInt(snapshot.getPriority(), 10) || 0;
+				var prior = parseInt(snapshot.val().priority, 10) || 0;
 				prior += incr;
 				snapshot.child('votes/' + $rootScope.user.id).ref().set({
 					user: {
